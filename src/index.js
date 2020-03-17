@@ -13,6 +13,12 @@ app.use(express.json())
 // INTEGRATE ROUTERS TO THE INDEX FILE
 app.use(usersRouter)
 
+app.get('/',
+  (request, response) => {
+    response.send('You have been connected')
+  }
+)
+
 app.listen(
   port,
   () => chalk ?

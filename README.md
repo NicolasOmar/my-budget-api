@@ -1,7 +1,10 @@
 # My Budget API
 RESTful API based on NodeJs to give middle/back-end support for upcomming Angular and React web applications.
 
-# Technologies used
+## What i need
+- [Node](https://nodejs.org/en/download/) v12.16.1 or above
+
+## Technologies used
 - [bcryptjs](https://www.npmjs.com/package/bcryptjs) v2.4.3
 - [express](https://www.npmjs.com/package/express) v4.17.1
 - [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) v8.5.1
