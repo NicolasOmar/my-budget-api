@@ -1,4 +1,5 @@
 const express = require('express')
+const cors = require('cors')
 // REQUIRE ALL 'MONGOOSE' CODE
 require('./src/db/mongoose')
 // IMPORT AND SET EXPRESS SERVER
@@ -9,6 +10,8 @@ const usersRouter = require('./src/routes/users')
 
 // MANAGE EXPRESS SERVER USING JSON
 app.use(express.json())
+// ALLOW REQUEST FROM ALL SITES
+app.use(cors());
 // INTEGRATE ROUTERS TO THE INDEX FILE
 app.use(usersRouter)
 
