@@ -14,6 +14,7 @@ RESTful API based on NodeJs to give middle/back-end support for upcomming Angula
 - [mongoose](https://www.npmjs.com/package/mongoose) v5.9.4
 - [validator](https://www.npmjs.com/package/validator) v12.2.0
 - [cors](https://www.npmjs.com/package/cors) v2.8.5
+- [hbs](https://www.npmjs.com/package/hbs) v4.1.0
 
 ## How to run it
 In case you just want to run it once, run the following:
