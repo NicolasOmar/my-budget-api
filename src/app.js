@@ -1,19 +1,20 @@
 const express = require('express')
 const cors = require('cors')
 // REQUIRE ALL 'MONGOOSE' CODE
-require('./src/db/mongoose')
+require('./db/mongoose')
 // IMPORT AND SET EXPRESS SERVER
 const app = express()
-const port = process.env.PORT
 // IMPORT ROUTERS
-const usersRouter = require('./src/routes/users')
+const usersRouter = require('./routes/users')
+const transactionRouter = require('./routes/transaction')
 
 // MANAGE EXPRESS SERVER USING JSON
 app.use(express.json())
 // ALLOW REQUEST FROM ALL SITES
 app.use(cors());
-// INTEGRATE ROUTERS TO THE INDEX FILE
+// INTEGRATE ROUTERS TO THE EXPRESS SERVER
 app.use(usersRouter)
+app.use(transactionRouter)
 
 app.get('/',
   (request, response) => {
@@ -21,7 +22,4 @@ app.get('/',
   }
 )
 
-app.listen(
-  port,
-  () => console.log(`Server up and working on port ${port}`)
-)
+module.exports = app

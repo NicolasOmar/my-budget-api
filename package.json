@@ -2,11 +2,11 @@
   "name": "my-budget-api",
   "version": "0.0.1",
   "description": "RESTful api based on NodeJs to give middle/back-end support for upcomming Angular and React web applications",
-  "main": "node index.js",
+  "main": "node ./src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "local": "env-cmd -f ./config/local.env nodemon index.js"
+    "start": "node ./src/index.js",
+    "local": "env-cmd -f ./config/local.env nodemon ./src/index.js"
   },
   "author": "Nicolás Omar González Passerino",
   "license": "MIT",

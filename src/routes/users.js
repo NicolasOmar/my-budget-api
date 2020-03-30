@@ -19,20 +19,6 @@ const upload = multer({
   }
 })
 
-// FIND ALL THE USERS
-router.get(
-  '/users',
-  authenticator,
-  async (request, response) => {
-    try {
-      const users = await User.find({})
-      response.status(201).send(users)
-    } catch (error) {
-      response.status(400).send(error)
-    }
-  }
-)
-
 // FIND YOUR USER DATA
 router.get(
   '/users/me',
@@ -124,14 +110,17 @@ router.post(
   authenticator,
   async (request, response) => {
     try {
-      request.user.tokens = request.token.tokens.filter(
+      request.user.tokens = request.user.tokens.filter(
         token => token.token !== request.token
       )
       await request.user.save()
       response.send()
     } catch (error) {
-      response.status(500).send()
+      response.status(500).send(error)
     }
+  },
+  (error, request, response, next) => { // IN CASE OF A MIDDLEWARE ERROR, THE ROUTER USES A SECOND ARGUMENT TO HANDLE SUCH ERRORS (LIKE A THEN <> CATCH STRUCTURE)
+    response.status(400).send({ error: error.message})
   }
 )
 
