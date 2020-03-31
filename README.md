@@ -1,5 +1,5 @@
 # My Budget API
-RESTful API based on NodeJs to give middle/back-end support for upcomming Angular and React web applications.
+RESTful API based on NodeJs to give middle/back-end support for upcomming Angular and [React](https://mybudget-react.herokuapp.com/) web applications.
 
 ## What i need
 - [Node](https://nodejs.org/en/download/) v12.16.1 or above
@@ -15,13 +15,27 @@ RESTful API based on NodeJs to give middle/back-end support for upcomming Angula
 - [validator](https://www.npmjs.com/package/validator) v12.2.0
 - [cors](https://www.npmjs.com/package/cors) v2.8.5
 - [hbs](https://www.npmjs.com/package/hbs) v4.1.0
+- [jest](https://www.npmjs.com/package/jest) v25.2.4
+- [supertest](https://www.npmjs.com/package/supertest) v4.0.2
+
+## Setup
+Just need to install the node packages in project´s root file
+```sh
+npm install
+```
 
 ## How to run it
-In case you just want to run it once, run the following:
-```sh
-npm start
-```
-In case you want to run it as a non-stopping server (based on [nodemon](https://www.npmjs.com/package/nodemon)), execute the following command:
+To run it as a non-stopping server (based on [nodemon](https://www.npmjs.com/package/nodemon))
 ```sh
 npm run local
 ```
+To run all test
+```sh
+npm test
+```
+
+## Branches & Environments
+| Branch | Environment | Usage |
+| ------ | ------ | ------ |
+| master | [mybudget-api](https://mybudget-api.herokuapp.com/) | Stable version |
+| in-progress | [mybudget-api-dev](https://mybudget-api-dev.herokuapp.com/) | Working on next iteration |
