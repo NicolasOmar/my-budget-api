@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node ./src/index.js",
     "local": "env-cmd -f ./config/local.env nodemon ./src/index.js",
-    "test": "env-cmd -f ./config/test.env jest --watch --runInBand"
+    "test": "env-cmd -f ./config/test.env jest --runInBand",
+    "lint": "eslint --fix src"
   },
   "jest": {
     "testEnvironment": "node"
@@ -26,9 +27,25 @@
     "validator": "^12.2.0"
   },
   "devDependencies": {
-    "chalk": "^3.0.0",
     "env-cmd": "^10.1.0",
-    "nodemon": "^2.0.2"
+    "eslint": "^6.8.0",
+    "eslint-plugin-node": "^11.1.0",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.1.1",
+    "nodemon": "^2.0.2",
+    "prettier": "^2.0.2"
+  },
+  "lint-staged": {
+    "src/**/!(*test).js": [
+      "prettier --write",
+      "eslint",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test && lint-staged"
+    }
   },
   "engines": {
     "node": "12.16.1",
