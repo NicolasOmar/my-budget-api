@@ -16,7 +16,7 @@ const upload = multer({
     }
 
     callback(undefined, true)
-  },
+  }
 })
 
 // FIND YOUR USER DATA
@@ -50,8 +50,7 @@ router.patch('/users/me', authenticator, async (request, response) => {
     allowedUpdates.includes(update)
   )
 
-  !isValidOperation &&
-    response.status(400).send({ error: strings.invalid.updates })
+  !isValidOperation && response.status(400).send({ error: strings.invalid.updates })
 
   try {
     updates.forEach(update => (request.user[update] = request.body[update]))
@@ -92,9 +91,7 @@ router.post(
   authenticator,
   async (request, response) => {
     try {
-      request.user.tokens = request.user.tokens.filter(
-        token => token.token !== request.token
-      )
+      request.user.tokens = request.user.tokens.filter(token => token.token !== request.token)
       await request.user.save()
       response.send()
     } catch (error) {

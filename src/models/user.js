@@ -16,7 +16,7 @@ const userSchema = new mongoose.Schema(
       required: true, // CANNOT AVOID INCLUDING THIS FIELD WHEN INSERT A NEW DOCUMENT
       trim: true, // REMOVE EMPTY SPACES BEFORE AND AFTER STRING
       lowercase: true, // CHANGE ENTIRE STRING INTO LOWERCASE
-      validate: (value) => {
+      validate: value => {
         if (!validator.isEmail(value)) {
           throw new Error(strings.invalid.email)
         }
@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
     },
     age: {
       type: Number,
-      validate: (value) => {
+      validate: value => {
         if (value <= 18) {
           throw new Error(strings.invalid.age(18))
         }
@@ -33,22 +33,25 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       trim: true,
-      validate: (value) => {
+      validate: value => {
         if (validator.contains(value, 'password') || value.lenght < 6) {
           throw new Error(strings.invalid.password(6))
         }
       }
     },
-    tokens: [{
-      token: {
-        type: String,
-        required: true
+    tokens: [
+      {
+        token: {
+          type: String,
+          required: true
+        }
       }
-    }],
+    ],
     avatar: {
       type: Buffer
     }
-  }, {
+  },
+  {
     timestamps: true // ADDED TO SET 'CREATEDAT' AND 'UPDATEDAT' FIELDS, HELPING SORTING FEATURE
   }
 )
@@ -64,8 +67,8 @@ userSchema.virtual(
 )
 
 userSchema.statics.findByCredentials = async (email, password) => {
-  const finded = await User.findOne({email})
-  
+  const finded = await User.findOne({ email })
+
   if (!finded) {
     throw new Error(strings.unableLogin)
   }
@@ -90,18 +93,15 @@ userSchema.methods.generateAuthToken = async function () {
 }
 
 // ACCESIBLE TO MODEL. USED TO HASH THE PASSWORD BEFORE SAVING
-userSchema.pre(
-  'save',
-  async function (next) {
-    const user = this
+userSchema.pre('save', async function (next) {
+  const user = this
 
-    if (user.isModified('password')) {
-      user.password = await bcrypt.hash(user.password, 8)
-    }
-
-    next()
+  if (user.isModified('password')) {
+    user.password = await bcrypt.hash(user.password, 8)
   }
-)
+
+  next()
+})
 
 const User = mongoose.model('User', userSchema)
 
