@@ -1,6 +1,6 @@
 {
   "name": "my-budget-api",
-  "version": "0.1.0",
+  "version": "0.0.3",
   "description": "RESTful api based on NodeJs to give middle/back-end support for upcomming Angular and React web applications",
   "main": "node ./src/index.js",
   "scripts": {
