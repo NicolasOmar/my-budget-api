@@ -19,14 +19,23 @@ app.use(cors())
 app.use(usersRouter)
 app.use(transactionRouter)
 
-// SETUP PATH
+// SETUP PATHS
+const publicPath = path.join(__dirname, '../public')
 const viewsPath = path.join(__dirname, '../templates/views')
 // SETUP HANDLEBARS ENGINE AND VIEWS LOCATION
 app.set('view engine', 'hbs')
 app.set('views', viewsPath)
+// SETUP STATIC DIRECTORY TO SERVE
+app.use(express.static(publicPath))
 
 app.get('/', (request, response) => {
-  response.render('index')
+  response.render('index', {
+    repoUrl: process.env.REPOISTORY_URL,
+    techDocsUrl: process.env.TECHNICAL_DOCS_URL,
+    projDocsUrl: process.env.PROJECT_DOCS_URL,
+    version: process.env.API_VERSION,
+    environment: process.env.API_ENVIRONMENT
+  })
 })
 
 module.exports = app

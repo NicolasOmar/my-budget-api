@@ -1,17 +1,14 @@
 {
   "name": "my-budget-api",
-  "version": "0.1.0",
+  "version": "0.0.4",
   "description": "RESTful api based on NodeJs to give middle/back-end support for upcomming Angular and React web applications",
   "main": "node ./src/index.js",
   "scripts": {
     "start": "node ./src/index.js",
-    "local": "env-cmd -f ./config/local.env nodemon ./src/index.js",
-    "test": "env-cmd -f ./config/test.env jest --runInBand",
-    "prettier": "prettier --write src",
-    "lint": "eslint --fix src"
-  },
-  "jest": {
-    "testEnvironment": "node"
+    "local": "env-cmd -f ./env/local.env nodemon ./src/index.js",
+    "test": "env-cmd -f ./env/test.env jest --runInBand",
+    "lint": "eslint --fix src",
+    "prettier": "prettier --write src"
   },
   "author": "Nicolás Omar González Passerino",
   "license": "MIT",
@@ -19,12 +16,10 @@
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "hbs": "^4.1.0",
-    "jest": "^25.2.4",
+    "hbs": "^4.1.0",    
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.4",
     "multer": "^1.4.2",
-    "supertest": "^4.0.2",
     "validator": "^12.2.0"
   },
   "devDependencies": {
@@ -32,14 +27,23 @@
     "eslint": "^6.8.0",
     "eslint-plugin-node": "^11.1.0",
     "husky": "^4.2.3",
+    "jest": "^25.2.4",
     "lint-staged": "^10.1.1",
     "nodemon": "^2.0.2",
-    "prettier": "^2.0.2"
+    "prettier": "^2.0.2",
+    "supertest": "^4.0.2"
+  },
+  "engines": {
+    "node": "12.16.1",
+    "npm": "6.13.7"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "lint-staged": {
     "src/**/!(*test).js": [
-      "eslint --fix",
       "prettier --write",
+      "eslint --fix",
       "git add"
     ]
   },
@@ -47,9 +51,5 @@
     "hooks": {
       "pre-commit": "npm test && lint-staged"
     }
-  },
-  "engines": {
-    "node": "12.16.1",
-    "npm": "6.13.7"
   }
 }

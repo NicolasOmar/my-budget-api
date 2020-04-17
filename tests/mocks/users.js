@@ -1,7 +1,8 @@
 const User = require('../../src/models/user')
 
 const firstUser = {
-  name: 'First User',
+  name: 'First',
+  lastName: 'User',
   email:'first@gmail.com',
   password: 'dsagrtyh'
 }
