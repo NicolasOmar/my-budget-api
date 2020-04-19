@@ -1,4 +1,3 @@
-const multer = require('multer')
 const express = require('express')
 const router = new express.Router()
 // IMPORT MIDDLEWARE
@@ -7,17 +6,6 @@ const authenticator = require('../middleware/auth')
 const User = require('../models/user')
 // IMPORT STRINGS
 const strings = require('../../config/strings')
-
-const upload = multer({
-  limits: 1000000,
-  fileFilter(request, file, callback) {
-    if (!file.originalname.endsWith('.jpg')) {
-      return callback(new Error(strings.invalid.fileType))
-    }
-
-    callback(undefined, true)
-  }
-})
 
 // FIND YOUR USER DATA
 router.get('/users/me', authenticator, async (request, response) => {
@@ -44,13 +32,15 @@ router.post('/users', async (request, response) => {
 // UPDATE YOUR USER DATA
 router.patch('/users/me', authenticator, async (request, response) => {
   const updates = Object.keys(request.body)
-  const allowedUpdates = ['name', 'email', 'password', 'age']
+  const allowedUpdates = ['name', 'lastName', 'email', 'password']
 
   const isValidOperation = Object.keys(request.body).every(update =>
     allowedUpdates.includes(update)
   )
 
-  !isValidOperation && response.status(400).send({ error: strings.invalid.updates })
+  if (!isValidOperation) {
+    response.status(402).send({ error: strings.invalid.updates })
+  }
 
   try {
     updates.forEach(update => (request.user[update] = request.body[update]))
@@ -59,7 +49,7 @@ router.patch('/users/me', authenticator, async (request, response) => {
     !request.user && response.status(404).send()
     response.send(request.user)
   } catch (error) {
-    response.status(400).send(error)
+    response.status(400).send()
   }
 })
 
@@ -114,22 +104,6 @@ router.post('/users/logoutAll', authenticator, async (request, response) => {
     response.status(500).send()
   }
 })
-
-// ADD AN AVATAR IMAGE TO THE AUTHENTICATED USER
-router.post(
-  '/users/me/avatar',
-  authenticator,
-  upload.single('avatar'),
-  async (request, response) => {
-    request.user.avatar = request.file.buffer
-    await request.user.save()
-    response.send()
-  },
-  (error, request, response) => {
-    // IN CASE OF A MIDDLEWARE ERROR, THE ROUTER USES A SECOND ARGUMENT TO HANDLE SUCH ERRORS (LIKE A THEN <> CATCH STRUCTURE)
-    response.status(400).send({ error: error.message })
-  }
-)
 
 // REMOVE THE AVATAR IMAGE OF THE AUTHENTICATED USER
 router.delete('/users/me/avatar', authenticator, async (request, response) => {

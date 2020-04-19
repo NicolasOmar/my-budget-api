@@ -3,41 +3,37 @@ const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 // IMPORT STRINGS
-const strings = require('../../config/strings')
+const { missing, invalid, unableLogin } = require('../../config/strings')
 
 const userSchema = new mongoose.Schema(
   {
     name: {
-      type: String
+      type: String,
+      required: [true, missing('Name')],
+      trim: true
+    },
+    lastName: {
+      type: String,
+      required: [true, missing('Last Name')],
+      trim: true
     },
     email: {
       type: String,
       unique: true, // CANNOT BE OTHER EQUAL THAT THIS VALUE
-      required: true, // CANNOT AVOID INCLUDING THIS FIELD WHEN INSERT A NEW DOCUMENT
+      required: [true, missing('Email')], // CANNOT AVOID INCLUDING THIS FIELD WHEN INSERT A NEW DOCUMENT
       trim: true, // REMOVE EMPTY SPACES BEFORE AND AFTER STRING
       lowercase: true, // CHANGE ENTIRE STRING INTO LOWERCASE
       validate: value => {
         if (!validator.isEmail(value)) {
-          throw new Error(strings.invalid.email)
-        }
-      }
-    },
-    age: {
-      type: Number,
-      validate: value => {
-        if (value <= 18) {
-          throw new Error(strings.invalid.age(18))
+          throw new Error(invalid.email)
         }
       }
     },
     password: {
       type: String,
+      required: [true, missing('Password')],
       trim: true,
-      validate: value => {
-        if (validator.contains(value, 'password') || value.lenght < 6) {
-          throw new Error(strings.invalid.password(6))
-        }
-      }
+      minlength: [6, invalid.password(6)]
     },
     tokens: [
       {
@@ -46,10 +42,7 @@ const userSchema = new mongoose.Schema(
           required: true
         }
       }
-    ],
-    avatar: {
-      type: Buffer
-    }
+    ]
   },
   {
     timestamps: true // ADDED TO SET 'CREATEDAT' AND 'UPDATEDAT' FIELDS, HELPING SORTING FEATURE
@@ -62,7 +55,7 @@ userSchema.virtual(
   {
     ref: 'Transaction', // WHAT MODEL YOU ARE MAKING REFERENCE
     localField: '_id', // WHAT FIELD IN YOUR DOCUMENT IS USED TO MAKE THE RELATIONSHIP (LIKE A PRIMARY KEY)
-    foreignField: 'user' // HOW IS CALLED YOUR LOCAL FIELD IN THE DOCUMENT WHICH YOU MADE THE RELATIONSHIP (LIK E A FOREIGN KEY)
+    foreignField: 'user' // HOW IS CALLED YOUR LOCAL FIELD IN THE DOCUMENT WHICH YOU MADE THE RELATIONSHIP (LIKE A FOREIGN KEY)
   }
 )
 
@@ -70,13 +63,13 @@ userSchema.statics.findByCredentials = async (email, password) => {
   const finded = await User.findOne({ email })
 
   if (!finded) {
-    throw new Error(strings.unableLogin)
+    throw new Error(unableLogin)
   }
 
   const user = await bcrypt.compare(password, finded.password)
 
   if (!user) {
-    throw new Error(strings.unableLogin)
+    throw new Error(unableLogin)
   }
 
   return finded
