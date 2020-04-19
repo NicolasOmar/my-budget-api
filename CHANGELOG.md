@@ -1,22 +1,21 @@
 # Changelog
 
-## [v0.0.4](https://github.com/NicolasOmar/my-budget-api/compare/0.0.3...0.0.4)
+## [v0.1.0](https://github.com/NicolasOmar/my-budget-api/compare/0.0.3...0.1.0)
 
 ### Enhancements
- - Unit testing added for `User` enpoints
- - Mocks added for `User` entity
- - Changes on `User` and `Transaction` entities
+ - Unit testing and Mocks added for `User` and `Transaction` endpoints
+ - Changes on `User` and `Transaction` entities according to business analysis
 
 ## [v0.0.3](https://github.com/NicolasOmar/my-budget-api/compare/0.0.2...0.0.3)
 
 ### Enhancements
- - Unit testing library added and implemented with first tests
+ - Added Jest as the Unit testing library with first tests
 
 ## [v0.0.2](https://github.com/NicolasOmar/my-budget-api/compare/0.0.1...0.0.2)
 
 ### Features
  - `Transaction` entity added as a relationship `n to 1` User
- - Transactioon endpoints added for `CREATE` and `READ` methods
+ - Transaction endpoints added for `CREATE` and `READ` methods
 
 ### Enhancements
  - Index page added to render a welcome message to the user when hits the main url

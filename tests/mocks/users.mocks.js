@@ -1,6 +1,6 @@
 const User = require('../../src/models/user')
 
-const userMocks = [
+const mocks = [
   {
     "name": "Virgie",
     "lastName": "Greer",
@@ -71,7 +71,7 @@ const setUpDatabase = async () => {
 }
 
 module.exports = {
-  userMocks,
+  mocks,
   requiredProps,
   requiredNames,
   failedMock,

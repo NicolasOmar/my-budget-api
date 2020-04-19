@@ -32,7 +32,7 @@ Those environments are been build deployed on [Heroku](https://www.heroku.com/) 
 | in-progress | [mybudget-api-dev](https://mybudget-api-dev.herokuapp.com/) | Working on next iteration
 
 ## Find out more
-| [Project Docs](https://github.com/NicolasOmar/my-budget-api/wiki/Project-documentation) | [Technical Docs](https://github.com/NicolasOmar/my-budget-api/wiki/Technical-documentation) | [Changelog](https://github.com/NicolasOmar/my-budget-api/blob/master/CHANGELOG.md) |
+| [Project Docs](https://github.com/NicolasOmar/my-budget-api/wiki/Project-documentation) | [Technical Docs](https://github.com/NicolasOmar/my-budget-api/wiki/Technical-documentation) | [Changelog](https://github.com/NicolasOmar/my-budget-api/blob/in-progress/CHANGELOG.md) |
 | ----- | ----- | ----- |
 | Documentation related to project aspects (objective, features & roadmap) | Documentation related to technical aspects (used packages, testing mechanisms) | List of features and bug fixes included on each iteration/release |
 

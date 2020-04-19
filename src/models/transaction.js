@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
-const validator = require('validator')
 // IMPORT STRINGS
-const { missing, invalid } = require('../../config/strings')
+const { missing } = require('../../config/strings')
 
 const transactionSchema = new mongoose.Schema(
   {
@@ -16,22 +15,12 @@ const transactionSchema = new mongoose.Schema(
     },
     amount: {
       type: Number,
-      required: [true, missing('Amount')],
-      validate: value => {
-        if (!validator.isNumeric(value)) {
-          throw new Error(invalid.amount)
-        }
-      }
+      required: [true, missing('Amount')]
     },
     date: {
       type: Date,
       required: [true, missing('Date')],
-      min: new Date('1/1/2000'),
-      validate: value => {
-        if (!validator.isDate(value)) {
-          throw new Error(invalid.date)
-        }
-      }
+      min: new Date('1/1/2000')
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
