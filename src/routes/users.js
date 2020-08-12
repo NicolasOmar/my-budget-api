@@ -1,20 +1,11 @@
 const express = require('express')
 const router = new express.Router()
-// IMPORT MIDDLEWARE
+// MIDDLEWARE
 const authenticator = require('../middleware/auth')
-// IMPORT MODEL
+// MODEL
 const User = require('../models/user')
-// IMPORT STRINGS
-const strings = require('../../config/strings')
-
-// FIND YOUR USER DATA
-router.get('/users/me', authenticator, async (request, response) => {
-  try {
-    response.send(request.user)
-  } catch (error) {
-    response.status(400).send(error)
-  }
-})
+// ERROR CODES AND MESSAGES
+const { MESSAGES } = require('../../config/errors')
 
 // INSERT A NEW USER
 router.post('/users', async (request, response) => {
@@ -23,7 +14,21 @@ router.post('/users', async (request, response) => {
   try {
     await newUser.save()
     const token = await newUser.generateAuthToken()
-    response.status(201).send({ newUser, token })
+    response.status(201).send({
+      name: newUser.name,
+      lastName: newUser.lastName,
+      email: newUser.email,
+      token
+    })
+  } catch (error) {
+    response.status(400).send(error)
+  }
+})
+
+// FIND YOUR USER DATA
+router.get('/users/me', authenticator, async (request, response) => {
+  try {
+    response.send(request.user)
   } catch (error) {
     response.status(400).send(error)
   }
@@ -39,7 +44,7 @@ router.patch('/users/me', authenticator, async (request, response) => {
   )
 
   if (!isValidOperation) {
-    response.status(402).send({ error: strings.invalid.updates })
+    response.status(403).send({ error: MESSAGES.UPDATES })
   }
 
   try {

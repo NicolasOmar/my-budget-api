@@ -7,7 +7,8 @@ const {
   setUpDataBase,
   failedMock
 } = require('./mocks/transaction.mocks')
-const { missing } = require('../config/strings')
+// ERRORS
+const { MESSAGES } = require('../config/errors')
 
 let userToken = null
 
@@ -43,7 +44,7 @@ describe('TRANSACTIONS', () => {
       
       expect(response.badRequest).toBeTruthy()
       expect(response.body.errors.title.kind).toBe('required')
-      expect(response.body.errors.title.message).toBe(missing('Title'))
+      expect(response.body.errors.title.message).toBe(MESSAGES.MISSING('Title'))
     })
   })
 })

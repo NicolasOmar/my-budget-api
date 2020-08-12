@@ -2,38 +2,38 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-// IMPORT STRINGS
-const { missing, invalid, unableLogin } = require('../../config/strings')
+// ERRORS
+const { MESSAGES } = require('../../config/errors')
 
 const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: [true, missing('Name')],
+      required: [true, MESSAGES.MISSING('Name')],
       trim: true
     },
     lastName: {
       type: String,
-      required: [true, missing('Last Name')],
+      required: [true, MESSAGES.MISSING('Last Name')],
       trim: true
     },
     email: {
       type: String,
       unique: true, // CANNOT BE OTHER EQUAL THAT THIS VALUE
-      required: [true, missing('Email')], // CANNOT AVOID INCLUDING THIS FIELD WHEN INSERT A NEW DOCUMENT
+      required: [true, MESSAGES.MISSING('Email')], // CANNOT AVOID INCLUDING THIS FIELD WHEN INSERT A NEW DOCUMENT
       trim: true, // REMOVE EMPTY SPACES BEFORE AND AFTER STRING
       lowercase: true, // CHANGE ENTIRE STRING INTO LOWERCASE
       validate: value => {
         if (!validator.isEmail(value)) {
-          throw new Error(invalid.email)
+          throw new Error(MESSAGES.EMAIL)
         }
       }
     },
     password: {
       type: String,
-      required: [true, missing('Password')],
+      required: [true, MESSAGES.MISSING('Password')],
       trim: true,
-      minlength: [6, invalid.password(6)]
+      minlength: [6, MESSAGES.PASSWORD(6)]
     },
     tokens: [
       {
@@ -45,7 +45,7 @@ const userSchema = new mongoose.Schema(
     ]
   },
   {
-    timestamps: true // ADDED TO SET 'CREATEDAT' AND 'UPDATEDAT' FIELDS, HELPING SORTING FEATURE
+    timestamps: true // ADDED TO SET 'CREATEDATE' AND 'UPDATEDATE' FIELDS, HELPING SORTING FEATURE
   }
 )
 
@@ -63,13 +63,13 @@ userSchema.statics.findByCredentials = async (email, password) => {
   const finded = await User.findOne({ email })
 
   if (!finded) {
-    throw new Error(unableLogin)
+    throw new Error(MESSAGES.LOGIN)
   }
 
   const user = await bcrypt.compare(password, finded.password)
 
   if (!user) {
-    throw new Error(unableLogin)
+    throw new Error(MESSAGES.LOGIN)
   }
 
   return finded

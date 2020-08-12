@@ -9,7 +9,8 @@ const {
   failedMock,
   setUpDatabase
 } = require('./mocks/users.mocks')
-const { missing, invalid } = require('../config/strings')
+// ERROR CODES AND MESSAGES
+const { ERROR_CODES, MESSAGES } = require('../config/errors')
 
 const updateObj = {
   name: 'Updated Name',
@@ -27,11 +28,9 @@ describe('USERS', () => {
         const { body } = await request(app).post('/users').send(mocks[0]).expect(201)
         
         Object.keys(mocks[0]).forEach(
-          key => key !== 'password' && expect(body.newUser[key]).toBe(mocks[0][key])
+          key => key !== 'password' && expect(body[key]).toBe(mocks[0][key])
         )
         
-        const comparePass = await bcrypt.compare(mocks[0]['password'], body.newUser['password'])        
-        expect(comparePass).toBeTruthy()
         expect(body.token).not.toBeNull()
     })
     
@@ -103,7 +102,7 @@ describe('USERS', () => {
           
           expect(response.badRequest).toBeTruthy()
           expect(response.body.errors[prop].kind).toBe('required')
-          expect(response.body.errors[prop].message).toBe(missing(requiredNames[i]))
+          expect(response.body.errors[prop].message).toBe(MESSAGES.MISSING(requiredNames[i]))
         }
       )
     })
@@ -114,7 +113,7 @@ describe('USERS', () => {
       
       expect(response.badRequest).toBeTruthy()
       expect(response.body.errors.email.kind).toBe('user defined')
-      expect(response.body.errors.email.message).toBe(invalid.email)
+      expect(response.body.errors.email.message).toBe(MESSAGES.EMAIL)
     })
 
     test('Sign up a new one with an invalid password (minlength validation)', async () => {
@@ -123,7 +122,7 @@ describe('USERS', () => {
       
       expect(response.badRequest).toBeTruthy()
       expect(response.body.errors.password.kind).toBe('minlength')
-      expect(response.body.errors.password.message).toBe(invalid.password(6))
+      expect(response.body.errors.password.message).toBe(MESSAGES.PASSWORD(6))
     })
     
     test('Sign up twice the same user', async () => {
@@ -132,6 +131,7 @@ describe('USERS', () => {
 
         expect(response.badRequest).toBeTruthy()
         expect(response.body.driver).toBeTruthy()
+        expect(response.body.code).toBe(ERROR_CODES.ALREADY_EXISTS)
     })
 
     test('Update a created user with invalid properties', async () => {
@@ -143,9 +143,9 @@ describe('USERS', () => {
             .patch('/users/me')
             .set('Authorization', `Bearer ${response.body.token}`)
             .send(failedUpdate)
-            .expect(402)
+            .expect(403)
         
-        expect(updated.body.error).toBe(invalid.updates)
+        expect(updated.body.error).toBe(MESSAGES.UPDATES)
     })
 
     test('Login a deleted one', async () => {

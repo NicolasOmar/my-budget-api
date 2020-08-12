@@ -3,34 +3,39 @@
   <head>
     <title>MyBudget API</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha256-9mbkOfVho3ZPXfM7W8sV2SndrGDuh7wuyLjtsWeTI1Q=" crossorigin="anonymous" />
-    <link rel="stylesheet" href="./css/styles.css"></style>
   </head>
+
   <body>
-    <div class="ui very padded text container segment">
-      <h2 class="ui center aligned dividing header">Welcome to My Budget API</h2>
-      <div class="ui container">
-        <div class="ui three column very relaxed grid">
-          <div class="column">            
-            <a href="{{repoUrl}}" target="_blank">
-              <i class="massive black github link icon" title="Repository"></i>
-            </a>
+    <div class="ui grid middle aligned" style="height: 100vh; width: 100%;">
+      <div class="four wide column"></div>
+      <div class="eight wide column">
+        <div class="ui raised segment">
+          <h2 class="ui center aligned header">Welcome to My Budget API</h2>
+          <div class="ui clearing divider"></div>
+
+          <div class="ui three column grid">
+            <div class="center aligned column">
+              <a href="{{repoUrl}}" target="_blank">
+                <i class="massive black github link icon" title="Repository"></i>
+              </a>
+            </div>
+            <div class="center aligned column">
+              <a href="{{techDocsUrl}}" target="_blank">
+                <i class="massive black terminal link icon" title="Technical documentation"></i>
+              </a>
+            </div>
+            <div class="center aligned column">
+              <a href="{{projDocsUrl}}" target="_blank">
+                <i class="massive black book link icon" title="Project Documentation"></i>
+              </a>
+            </div>
           </div>
-          <div class="column">
-            <a href="{{techDocsUrl}}" target="_blank">
-              <i class="massive black terminal link icon" title="Technical documentation"></i>
-            </a>
-          </div>
-          <div class="column">
-            <a href="{{projDocsUrl}}" target="_blank">
-              <i class="massive black book link icon" title="Project Documentation"></i>
-            </a>
-          </div>
+
+          <div class="ui clearing divider"></div>
+          <p class="ui center aligned header">{{version}}</p>
         </div>
       </div>
-    </div>
-
-    <div class="ui centered inverted vertical footer segment page-footer">
-      <div class="ui container">MyBudget v{{version}} in {{environment}} environment</div>
+      <div class="four wide column"></div>
     </div>
   </body>
 </html>

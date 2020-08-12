@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken')
-// IMPORT MODELS
+// MODELS
 const User = require('../models/user')
-// IMPORT STRINGS
-const strings = require('../../config/strings')
+// ERRORS
+const { MESSAGES } = require('../../config/errors')
 
 const auth = async (request, response, next) => {
   try {
@@ -18,7 +18,7 @@ const auth = async (request, response, next) => {
     request.user = finded
     next()
   } catch (error) {
-    response.status(401).send({ ...error, msg: strings.authenticate })
+    response.status(401).send({ ...error, msg: MESSAGES.AUTHENTICATE })
   }
 }
 

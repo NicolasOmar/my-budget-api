@@ -1,12 +1,12 @@
 const mongoose = require('mongoose')
-// IMPORT STRINGS
-const { missing } = require('../../config/strings')
+// ERRORS
+const { MESSAGES } = require('../../config/errors')
 
 const transactionSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, missing('Title')],
+      required: [true, MESSAGES.MISSING('Title')],
       trim: true
     },
     description: {
@@ -15,11 +15,11 @@ const transactionSchema = new mongoose.Schema(
     },
     amount: {
       type: Number,
-      required: [true, missing('Amount')]
+      required: [true, MESSAGES.MISSING('Amount')]
     },
     date: {
       type: Date,
-      required: [true, missing('Date')],
+      required: [true, MESSAGES.MISSING('Date')],
       min: new Date('1/1/2000')
     },
     user: {

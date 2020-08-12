@@ -29,12 +29,19 @@ app.set('views', viewsPath)
 app.use(express.static(publicPath))
 
 app.get('/', (request, response) => {
+  const {
+    REPOISTORY_URL,
+    TECHNICAL_DOCS_URL,
+    PROJECT_DOCS_URL,
+    API_VERSION,
+    API_ENVIRONMENT
+  } = process.env
+
   response.render('index', {
-    repoUrl: process.env.REPOISTORY_URL,
-    techDocsUrl: process.env.TECHNICAL_DOCS_URL,
-    projDocsUrl: process.env.PROJECT_DOCS_URL,
-    version: process.env.API_VERSION,
-    environment: process.env.API_ENVIRONMENT
+    repoUrl: REPOISTORY_URL,
+    techDocsUrl: TECHNICAL_DOCS_URL,
+    projDocsUrl: PROJECT_DOCS_URL,
+    version: `v${API_VERSION} on ${API_ENVIRONMENT} environment`
   })
 })
 
