@@ -14,12 +14,7 @@ router.post('/users', async (request, response) => {
   try {
     await newUser.save()
     const token = await newUser.generateAuthToken()
-    response.status(201).send({
-      name: newUser.name,
-      lastName: newUser.lastName,
-      email: newUser.email,
-      token
-    })
+    response.status(201).send({ newUser, token })
   } catch (error) {
     response.status(400).send(error)
   }
@@ -108,13 +103,6 @@ router.post('/users/logoutAll', authenticator, async (request, response) => {
   } catch (error) {
     response.status(500).send()
   }
-})
-
-// REMOVE THE AVATAR IMAGE OF THE AUTHENTICATED USER
-router.delete('/users/me/avatar', authenticator, async (request, response) => {
-  request.user.avatar = undefined
-  await request.user.save()
-  response.send()
 })
 
 module.exports = router

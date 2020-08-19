@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema(
       lowercase: true, // CHANGE ENTIRE STRING INTO LOWERCASE
       validate: value => {
         if (!validator.isEmail(value)) {
-          throw new Error(MESSAGES.EMAIL)
+          throw { message: MESSAGES.EMAIL }
         }
       }
     },
@@ -63,13 +63,13 @@ userSchema.statics.findByCredentials = async (email, password) => {
   const finded = await User.findOne({ email })
 
   if (!finded) {
-    throw new Error(MESSAGES.LOGIN)
+    throw { message: MESSAGES.LOGIN }
   }
 
   const user = await bcrypt.compare(password, finded.password)
 
   if (!user) {
-    throw new Error(MESSAGES.LOGIN)
+    throw { message: MESSAGES.LOGIN }
   }
 
   return finded
@@ -95,6 +95,20 @@ userSchema.pre('save', async function (next) {
 
   next()
 })
+
+userSchema.methods.toJSON = function () {
+  const user = this
+  const userObj = user.toObject()
+
+  delete userObj.password
+  delete userObj.tokens
+  delete userObj.createdAt
+  delete userObj.updatedAt
+  delete userObj.__v
+  delete userObj._id
+
+  return userObj
+}
 
 const User = mongoose.model('User', userSchema)
 

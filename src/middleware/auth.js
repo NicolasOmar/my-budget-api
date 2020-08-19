@@ -18,7 +18,7 @@ const auth = async (request, response, next) => {
     request.user = finded
     next()
   } catch (error) {
-    response.status(401).send({ ...error, msg: MESSAGES.AUTHENTICATE })
+    response.status(401).send({ ...error, message: MESSAGES.AUTHENTICATE })
   }
 }
 
