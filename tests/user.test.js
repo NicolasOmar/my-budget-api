@@ -23,7 +23,7 @@ afterAll(() => mongoose.disconnect())
 
 describe('USERS', () => {
   describe('HAPPY PATH', () => {
-    test('Login a created one', async () => {
+    test('Login a created user', async () => {
       await request(app).post('/users').send(mocks[0]).expect(201)
       const { body } =
         await request(app)
@@ -36,31 +36,31 @@ describe('USERS', () => {
       )
     })
 
-    test('Sign up a new one and check registred properties', async () => {
-        const { body } = await request(app).post('/users').send(mocks[0]).expect(201)
-        Object.keys(mocks[0]).forEach(
-          key => key !== 'password' && expect(body.newUser[key]).toBe(mocks[0][key])
-        )
-        expect(body.token).not.toBeNull()
+    test('Sign up a new user and check registred properties', async () => {
+      const { body } = await request(app).post('/users').send(mocks[0]).expect(201)
+      Object.keys(mocks[0]).forEach(
+        key => key !== 'password' && expect(body.newUser[key]).toBe(mocks[0][key])
+      )
+      expect(body.token).not.toBeNull()
     })
     
-    test('Update data of a created one', async () => {
-        const response = await request(app).post('/users').send(mocks[0]).expect(201)
-        const updated =
-          await request(app)
-            .patch('/users/me')
-            .set('Authorization', `Bearer ${response.body.token}`)
-            .send(updateObj)
-            .expect(200)
-        
-        Object.keys(updateObj).forEach(
-          prop => {
-            expect(updated.body[prop]).toBe(updateObj[prop])
-          }
-        )
+    test('Update data of a created user', async () => {
+      const response = await request(app).post('/users').send(mocks[0]).expect(201)
+      const updated =
+        await request(app)
+          .patch('/users/me')
+          .set('Authorization', `Bearer ${response.body.token}`)
+          .send(updateObj)
+          .expect(200)
+      
+      Object.keys(updateObj).forEach(
+        prop => {
+          expect(updated.body[prop]).toBe(updateObj[prop])
+        }
+      )
     })
 
-    test('Delete a created one', async () => {
+    test('Delete a created user', async () => {
       const response = await request(app).post('/users').send(mocks[0]).expect(201)
       const { body } =
         await request(app)
@@ -74,18 +74,34 @@ describe('USERS', () => {
       )
     })
 
-    test('Logout a created one', async () => {
+    test('Log out a created user', async () => {
       const response = await request(app).post('/users').send(mocks[0]).expect(201)
-
-      await request(app)
+      const logOutResponse =
+        await request(app)
           .post('/users/logout')
           .set('Authorization', `Bearer ${response.body.token}`)
           .expect(200)
+
+      expect(logOutResponse).toBeTruthy();
+    })
+
+    test('Log out a created user from all sessions', async () => {
+      const response = await request(app).post('/users').send(mocks[0]).expect(201)
+      const logOutResponse =
+        await request(app)
+          .post('/users/logoutAll')
+          .set('Authorization', `Bearer ${response.body.token}`)
+          .expect(200)
+
+      expect(logOutResponse).toBeTruthy();
     })
   })
 
   describe('SAD PATH', () => {
-    test('Login a deleted one', async () => {
+    //trying to login a worng user (email/passowrd)
+    //what happens if you log a user with invalid mail
+
+    test('Login a deleted user', async () => {
       const { body } = await request(app).post('/users').send(mocks[0]).expect(201)
 
       await request(app)
@@ -101,7 +117,7 @@ describe('USERS', () => {
       expect(response.body.message).toBe(MESSAGES.LOGIN)
     })
 
-    test('Sign up a new one with certain required fields empty', async () => {
+    test('Sign up a new user with certain required fields empty', async () => {
       requiredProps.forEach(
         async (prop, i) => {
           const mockFail = failedMock(mocks[0], prop)
@@ -114,7 +130,7 @@ describe('USERS', () => {
       )
     })
 
-    test('Sign up a new one with an invalid email (user validation)', async () => {
+    test('Sign up a new user with an invalid email (user validation)', async () => {
       const mockFailedEmail = { ...mocks[0], email: 'test'}
       const response = await request(app).post('/users').send(mockFailedEmail).expect(400)
       
@@ -123,7 +139,7 @@ describe('USERS', () => {
       expect(response.body.errors.email.message).toBe(MESSAGES.EMAIL)
     })
 
-    test('Sign up a new one with an invalid password (minlength validation)', async () => {
+    test('Sign up a new user with an invalid password (minlength validation)', async () => {
       const mockFailedPass = { ...mocks[0], password: 'test'}
       const response = await request(app).post('/users').send(mockFailedPass).expect(400)
       
@@ -133,26 +149,60 @@ describe('USERS', () => {
     })
     
     test('Sign up twice the same user', async () => {
-        await request(app).post('/users').send(mocks[0]).expect(201)
-        const response = await request(app).post('/users').send(mocks[0]).expect(400)
+      await request(app).post('/users').send(mocks[0]).expect(201)
+      const response = await request(app).post('/users').send(mocks[0]).expect(400)
 
-        expect(response.badRequest).toBeTruthy()
-        expect(response.body.driver).toBeTruthy()
-        expect(response.body.code).toBe(ERROR_CODES.ALREADY_EXISTS)
+      expect(response.badRequest).toBeTruthy()
+      expect(response.body.driver).toBeTruthy()
+      expect(response.body.code).toBe(ERROR_CODES.ALREADY_EXISTS)
     })
 
     test('Update a created user with invalid properties', async () => {
-        const failedUpdate = { age: 15 }
+      const failedUpdate = { age: 15 }
 
-        const response = await request(app).post('/users').send(mocks[0]).expect(201)
-        const updated =
-          await request(app)
-            .patch('/users/me')
-            .set('Authorization', `Bearer ${response.body.token}`)
-            .send(failedUpdate)
-            .expect(403)
+      const response = await request(app).post('/users').send(mocks[0]).expect(201)
+      const updated =
+        await request(app)
+          .patch('/users/me')
+          .set('Authorization', `Bearer ${response.body.token}`)
+          .send(failedUpdate)
+          .expect(403)
+      
+      expect(updated.body.error).toBe(MESSAGES.UPDATES)
+    })
+
+    //trying to delete an already deleted user
+
+    test('Log out a deleted user', async () => {
+      const { body } = await request(app).post('/users').send(mocks[0]).expect(201)
+
+      await request(app)
+        .delete('/users/me')
+        .set('Authorization', `Bearer ${body.token}`)
+        .expect(200)
+
+      const response = await request(app)
+        .post('/users/logout')
+        .set('Authorization', `Bearer ${body.token}`)
+        .expect(401)
         
-        expect(updated.body.error).toBe(MESSAGES.UPDATES)
+      expect(response.body.message).toBe(MESSAGES.AUTHENTICATE)
+    })
+
+    test('Log out a deleted user from all sessions', async () => {
+      const { body } = await request(app).post('/users').send(mocks[0]).expect(201)
+
+      await request(app)
+        .delete('/users/me')
+        .set('Authorization', `Bearer ${body.token}`)
+        .expect(200)
+
+      const response = await request(app)
+        .post('/users/logoutAll')
+        .set('Authorization', `Bearer ${body.token}`)
+        .expect(401)
+        
+      expect(response.body.message).toBe(MESSAGES.AUTHENTICATE)
     })
   })
 })

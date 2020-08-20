@@ -83,7 +83,7 @@ router.post(
     try {
       request.user.tokens = request.user.tokens.filter(token => token.token !== request.token)
       await request.user.save()
-      response.send()
+      response.send(true)
     } catch (error) {
       response.status(500).send(error)
     }
@@ -99,7 +99,7 @@ router.post('/users/logoutAll', authenticator, async (request, response) => {
   try {
     request.user.tokens = []
     await request.user.save()
-    response.send()
+    response.send(true)
   } catch (error) {
     response.status(500).send()
   }
