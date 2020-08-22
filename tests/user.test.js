@@ -2,7 +2,8 @@ const request = require('supertest')
 const app = require('../src/app')
 const mongoose = require('../src/db/mongoose')
 const {
-  mocks,
+  goodMocks,
+  badMocks,
   requiredProps,
   requiredNames,
   failedMock,
@@ -24,28 +25,28 @@ afterAll(() => mongoose.disconnect())
 describe('USERS', () => {
   describe('HAPPY PATH', () => {
     test('Login a created user', async () => {
-      await request(app).post('/users').send(mocks[0]).expect(201)
+      await request(app).post('/users').send(goodMocks[0]).expect(201)
       const { body } =
         await request(app)
           .post('/users/login')
-          .send({ email: mocks[0].email, password: mocks[0].password})
+          .send({ email: goodMocks[0].email, password: goodMocks[0].password})
           .expect(200)
 
-      Object.keys(mocks[0]).forEach(
-        key => key !== 'password' && expect(body.userLogged[key]).toBe(mocks[0][key])
+      Object.keys(goodMocks[0]).forEach(
+        key => key !== 'password' && expect(body.userLogged[key]).toBe(goodMocks[0][key])
       )
     })
 
     test('Sign up a new user and check registred properties', async () => {
-      const { body } = await request(app).post('/users').send(mocks[0]).expect(201)
-      Object.keys(mocks[0]).forEach(
-        key => key !== 'password' && expect(body.newUser[key]).toBe(mocks[0][key])
+      const { body } = await request(app).post('/users').send(goodMocks[0]).expect(201)
+      Object.keys(goodMocks[0]).forEach(
+        key => key !== 'password' && expect(body.newUser[key]).toBe(goodMocks[0][key])
       )
       expect(body.token).not.toBeNull()
     })
     
     test('Update data of a created user', async () => {
-      const response = await request(app).post('/users').send(mocks[0]).expect(201)
+      const response = await request(app).post('/users').send(goodMocks[0]).expect(201)
       const updated =
         await request(app)
           .patch('/users/me')
@@ -61,7 +62,7 @@ describe('USERS', () => {
     })
 
     test('Delete a created user', async () => {
-      const response = await request(app).post('/users').send(mocks[0]).expect(201)
+      const response = await request(app).post('/users').send(goodMocks[0]).expect(201)
       const { body } =
         await request(app)
           .delete('/users/me')
@@ -70,12 +71,12 @@ describe('USERS', () => {
           .expect(200)
       
       Object.keys(body).forEach(
-        key => key !== 'password' && expect(body[key]).toBe(mocks[0][key])
+        key => key !== 'password' && expect(body[key]).toBe(goodMocks[0][key])
       )
     })
 
     test('Log out a created user', async () => {
-      const response = await request(app).post('/users').send(mocks[0]).expect(201)
+      const response = await request(app).post('/users').send(goodMocks[0]).expect(201)
       const logOutResponse =
         await request(app)
           .post('/users/logout')
@@ -86,7 +87,7 @@ describe('USERS', () => {
     })
 
     test('Log out a created user from all sessions', async () => {
-      const response = await request(app).post('/users').send(mocks[0]).expect(201)
+      const response = await request(app).post('/users').send(goodMocks[0]).expect(201)
       const logOutResponse =
         await request(app)
           .post('/users/logoutAll')
@@ -98,11 +99,23 @@ describe('USERS', () => {
   })
 
   describe('SAD PATH', () => {
-    //trying to login a worng user (email/passowrd)
-    //what happens if you log a user with invalid mail
+    test('Login a not created user', async () => {
+      const response = await request(app).post('/users/login').send(badMocks[0]).expect(400)
+      expect(response.body.message).toBe(MESSAGES.LOGIN)
+    })
+
+    test('Login a user with bad properties', async () => {
+      const response = await request(app).post('/users/login').send(badMocks[1]).expect(400)
+      expect(response.badRequest).toBeTruthy()
+      expect(response.body.message).toBe(MESSAGES.LOGIN)
+
+      const mailResponse = await request(app).post('/users/login').send(badMocks[2]).expect(400)
+      expect(mailResponse.badRequest).toBeTruthy()
+      expect(mailResponse.body.message).toBe(MESSAGES.LOGIN)
+    })
 
     test('Login a deleted user', async () => {
-      const { body } = await request(app).post('/users').send(mocks[0]).expect(201)
+      const { body } = await request(app).post('/users').send(goodMocks[0]).expect(201)
 
       await request(app)
         .delete('/users/me')
@@ -120,7 +133,7 @@ describe('USERS', () => {
     test('Sign up a new user with certain required fields empty', async () => {
       requiredProps.forEach(
         async (prop, i) => {
-          const mockFail = failedMock(mocks[0], prop)
+          const mockFail = failedMock(goodMocks[0], prop)
           const response = await request(app).post('/users').send(mockFail).expect(400)
           
           expect(response.badRequest).toBeTruthy()
@@ -131,7 +144,7 @@ describe('USERS', () => {
     })
 
     test('Sign up a new user with an invalid email (user validation)', async () => {
-      const mockFailedEmail = { ...mocks[0], email: 'test'}
+      const mockFailedEmail = { ...goodMocks[0], email: 'test'}
       const response = await request(app).post('/users').send(mockFailedEmail).expect(400)
       
       expect(response.badRequest).toBeTruthy()
@@ -140,7 +153,7 @@ describe('USERS', () => {
     })
 
     test('Sign up a new user with an invalid password (minlength validation)', async () => {
-      const mockFailedPass = { ...mocks[0], password: 'test'}
+      const mockFailedPass = { ...goodMocks[0], password: 'test'}
       const response = await request(app).post('/users').send(mockFailedPass).expect(400)
       
       expect(response.badRequest).toBeTruthy()
@@ -149,8 +162,8 @@ describe('USERS', () => {
     })
     
     test('Sign up twice the same user', async () => {
-      await request(app).post('/users').send(mocks[0]).expect(201)
-      const response = await request(app).post('/users').send(mocks[0]).expect(400)
+      await request(app).post('/users').send(goodMocks[0]).expect(201)
+      const response = await request(app).post('/users').send(goodMocks[0]).expect(400)
 
       expect(response.badRequest).toBeTruthy()
       expect(response.body.driver).toBeTruthy()
@@ -160,7 +173,7 @@ describe('USERS', () => {
     test('Update a created user with invalid properties', async () => {
       const failedUpdate = { age: 15 }
 
-      const response = await request(app).post('/users').send(mocks[0]).expect(201)
+      const response = await request(app).post('/users').send(goodMocks[0]).expect(201)
       const updated =
         await request(app)
           .patch('/users/me')
@@ -174,7 +187,7 @@ describe('USERS', () => {
     //trying to delete an already deleted user
 
     test('Log out a deleted user', async () => {
-      const { body } = await request(app).post('/users').send(mocks[0]).expect(201)
+      const { body } = await request(app).post('/users').send(goodMocks[0]).expect(201)
 
       await request(app)
         .delete('/users/me')
@@ -190,7 +203,7 @@ describe('USERS', () => {
     })
 
     test('Log out a deleted user from all sessions', async () => {
-      const { body } = await request(app).post('/users').send(mocks[0]).expect(201)
+      const { body } = await request(app).post('/users').send(goodMocks[0]).expect(201)
 
       await request(app)
         .delete('/users/me')

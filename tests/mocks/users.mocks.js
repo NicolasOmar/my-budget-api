@@ -1,6 +1,6 @@
 const User = require('../../src/models/user')
 
-const mocks = [
+const goodMocks = [
   {
     "name": "Virgie",
     "lastName": "Greer",
@@ -57,6 +57,27 @@ const mocks = [
   }
 ]
 
+const badMocks = [
+  {
+    "name": "Virgie",
+    "lastName": "Greer",
+    "email": "virgie@gmail.com",
+    "password": "eueueueueueueueueu"
+  },
+  {
+    "name": "Virgie",
+    "lastName": "Greer",
+    "email": "virgie@gmail.com",
+    "password": "eu"
+  },
+  {
+    "name": "Virgie",
+    "lastName": "Greer",
+    "email": "virgie",
+    "password": "euautelaboris2"
+  }
+]
+
 const requiredProps = ['name', 'lastName', 'email', 'password']
 const requiredNames = ['Name', 'Last Name', 'Email', 'Password']
 
@@ -71,7 +92,8 @@ const setUpDatabase = async () => {
 }
 
 module.exports = {
-  mocks,
+  goodMocks,
+  badMocks,
   requiredProps,
   requiredNames,
   failedMock,
