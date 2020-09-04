@@ -1,6 +1,6 @@
 {
   "name": "my-budget-api",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "RESTful api based on NodeJs to give middle/back-end support for upcomming Angular and React web applications",
   "main": "node ./src/index.js",
   "scripts": {
@@ -9,7 +9,7 @@
     "test": "env-cmd -f ./env/test.env jest --runInBand",
     "lint": "eslint --fix src",
     "prettier": "prettier --write src",
-    "update-version": "npm --no-git-tag-version version patch && git add package.json"
+    "update-version": "node update-version.js"
   },
   "author": "Nicolás Omar González Passerino",
   "license": "MIT",
@@ -44,13 +44,13 @@
   "lint-staged": {
     "src/**/!(*test).js": [
       "prettier --write",
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ]
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm test && lint-staged && npm run update-version"
+      "pre-commit": "npm test && lint-staged",
+      "pre-push": "npm run update-version"
     }
   }
 }
