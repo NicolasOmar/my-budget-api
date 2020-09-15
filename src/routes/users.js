@@ -6,9 +6,11 @@ const authenticator = require('../middleware/auth')
 const User = require('../models/user')
 // ERROR CODES AND MESSAGES
 const { MESSAGES } = require('../../config/errors')
+// ROUTES
+const { USERS_ROUTES } = require('../../config/routes')
 
 // INSERT A NEW USER
-router.post('/users', async (request, response) => {
+router.post(USERS_ROUTES.main, async (request, response) => {
   const newUser = new User(request.body)
 
   try {
@@ -21,7 +23,7 @@ router.post('/users', async (request, response) => {
 })
 
 // FIND YOUR USER DATA
-router.get('/users/me', authenticator, async (request, response) => {
+router.get(USERS_ROUTES.me, authenticator, async (request, response) => {
   try {
     response.send(request.user)
   } catch (error) {
@@ -30,7 +32,7 @@ router.get('/users/me', authenticator, async (request, response) => {
 })
 
 // UPDATE YOUR USER DATA
-router.patch('/users/me', authenticator, async (request, response) => {
+router.patch(USERS_ROUTES.me, authenticator, async (request, response) => {
   const updates = Object.keys(request.body)
   const allowedUpdates = ['name', 'lastName', 'email', 'password']
 
@@ -54,7 +56,7 @@ router.patch('/users/me', authenticator, async (request, response) => {
 })
 
 // DELETE YOUR USER
-router.delete('/users/me', authenticator, async (request, response) => {
+router.delete(USERS_ROUTES.me, authenticator, async (request, response) => {
   try {
     await request.user.remove()
     response.send(request.user)
@@ -64,7 +66,7 @@ router.delete('/users/me', authenticator, async (request, response) => {
 })
 
 // LOGIN AN USER
-router.post('/users/login', async (request, response) => {
+router.post(USERS_ROUTES.login, async (request, response) => {
   try {
     const { email, password } = request.body
     const userLogged = await User.findByCredentials(email, password)
@@ -77,7 +79,7 @@ router.post('/users/login', async (request, response) => {
 
 // LOGOUT YOUR USER FROM ONE DEVICE USING ITS TOKEN
 router.post(
-  '/users/logout',
+  USERS_ROUTES.logout,
   authenticator,
   async (request, response) => {
     try {
@@ -95,7 +97,7 @@ router.post(
 )
 
 // LOGOUT YOUR USER FROM ALL CONNECTED DEVICES
-router.post('/users/logoutAll', authenticator, async (request, response) => {
+router.post(USERS_ROUTES.logoutAll, authenticator, async (request, response) => {
   try {
     request.user.tokens = []
     await request.user.save()

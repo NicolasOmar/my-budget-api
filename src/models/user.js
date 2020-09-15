@@ -7,6 +7,7 @@ const { MESSAGES } = require('../../config/errors')
 
 const userSchema = new mongoose.Schema(
   {
+    // TODO: INCLUDE MINLENGTH AND MAXLENGTH
     name: {
       type: String,
       required: [true, MESSAGES.MISSING('Name')],

@@ -20,7 +20,7 @@ const runVersionUpdate = async () => {
     await exec('git reset --soft HEAD~1')
     await exec(`npm version ${value} --no-git-tag-version`);
     await exec('git add package.json');
-    await exec(`git commit -m "${stdout.trim()}"`);
+    await exec(`git commit -m "${stdout.trim()}" --no-verify`);
   } catch (err) {
     console.log(`Something went wrong:\n${err}`);
   }

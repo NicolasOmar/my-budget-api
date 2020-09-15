@@ -11,6 +11,8 @@ const {
 } = require('./mocks/users.mocks')
 // ERROR CODES AND MESSAGES
 const { ERROR_CODES, MESSAGES } = require('../config/errors')
+// ROUTES
+const { USERS_ROUTES } = require('../config/routes')
 
 const updateObj = {
   name: 'Updated Name',
@@ -25,10 +27,10 @@ afterAll(() => mongoose.disconnect())
 describe('USERS', () => {
   describe('HAPPY PATH', () => {
     test('Login a created user', async () => {
-      await request(app).post('/users').send(goodMocks[0]).expect(201)
+      await request(app).post(USERS_ROUTES.main).send(goodMocks[0]).expect(201)
       const { body } =
         await request(app)
-          .post('/users/login')
+          .post(USERS_ROUTES.login)
           .send({ email: goodMocks[0].email, password: goodMocks[0].password})
           .expect(200)
 
@@ -38,7 +40,7 @@ describe('USERS', () => {
     })
 
     test('Sign up a new user and check registred properties', async () => {
-      const { body } = await request(app).post('/users').send(goodMocks[0]).expect(201)
+      const { body } = await request(app).post(USERS_ROUTES.main).send(goodMocks[0]).expect(201)
       Object.keys(goodMocks[0]).forEach(
         key => key !== 'password' && expect(body.newUser[key]).toBe(goodMocks[0][key])
       )
@@ -46,10 +48,10 @@ describe('USERS', () => {
     })
     
     test('Update data of a created user', async () => {
-      const response = await request(app).post('/users').send(goodMocks[0]).expect(201)
+      const response = await request(app).post(USERS_ROUTES.main).send(goodMocks[0]).expect(201)
       const updated =
         await request(app)
-          .patch('/users/me')
+          .patch(USERS_ROUTES.me)
           .set('Authorization', `Bearer ${response.body.token}`)
           .send(updateObj)
           .expect(200)
@@ -62,10 +64,10 @@ describe('USERS', () => {
     })
 
     test('Delete a created user', async () => {
-      const response = await request(app).post('/users').send(goodMocks[0]).expect(201)
+      const response = await request(app).post(USERS_ROUTES.main).send(goodMocks[0]).expect(201)
       const { body } =
         await request(app)
-          .delete('/users/me')
+          .delete(USERS_ROUTES.me)
           .set('Authorization', `Bearer ${response.body.token}`)
           .send()
           .expect(200)
@@ -76,10 +78,10 @@ describe('USERS', () => {
     })
 
     test('Log out a created user', async () => {
-      const response = await request(app).post('/users').send(goodMocks[0]).expect(201)
+      const response = await request(app).post(USERS_ROUTES.main).send(goodMocks[0]).expect(201)
       const logOutResponse =
         await request(app)
-          .post('/users/logout')
+          .post(USERS_ROUTES.logout)
           .set('Authorization', `Bearer ${response.body.token}`)
           .expect(200)
 
@@ -87,10 +89,10 @@ describe('USERS', () => {
     })
 
     test('Log out a created user from all sessions', async () => {
-      const response = await request(app).post('/users').send(goodMocks[0]).expect(201)
+      const response = await request(app).post(USERS_ROUTES.main).send(goodMocks[0]).expect(201)
       const logOutResponse =
         await request(app)
-          .post('/users/logoutAll')
+          .post(USERS_ROUTES.logoutAll)
           .set('Authorization', `Bearer ${response.body.token}`)
           .expect(200)
 
@@ -100,30 +102,30 @@ describe('USERS', () => {
 
   describe('SAD PATH', () => {
     test('Login a not created user', async () => {
-      const response = await request(app).post('/users/login').send(badMocks[0]).expect(400)
+      const response = await request(app).post(USERS_ROUTES.login).send(badMocks[0]).expect(400)
       expect(response.body.message).toBe(MESSAGES.LOGIN)
     })
 
     test('Login a user with bad properties', async () => {
-      const response = await request(app).post('/users/login').send(badMocks[1]).expect(400)
+      const response = await request(app).post(USERS_ROUTES.login).send(badMocks[1]).expect(400)
       expect(response.badRequest).toBeTruthy()
       expect(response.body.message).toBe(MESSAGES.LOGIN)
 
-      const mailResponse = await request(app).post('/users/login').send(badMocks[2]).expect(400)
+      const mailResponse = await request(app).post(USERS_ROUTES.login).send(badMocks[2]).expect(400)
       expect(mailResponse.badRequest).toBeTruthy()
       expect(mailResponse.body.message).toBe(MESSAGES.LOGIN)
     })
 
     test('Login a deleted user', async () => {
-      const { body } = await request(app).post('/users').send(goodMocks[0]).expect(201)
+      const { body } = await request(app).post(USERS_ROUTES.main).send(goodMocks[0]).expect(201)
 
       await request(app)
-        .delete('/users/me')
+        .delete(USERS_ROUTES.me)
         .set('Authorization', `Bearer ${body.token}`)
         .expect(200)
 
       const response = await request(app)
-        .post('/users/login')
+        .post(USERS_ROUTES.login)
         .set('Authorization', `Bearer ${body.token}`)
         .expect(400)
 
@@ -134,7 +136,7 @@ describe('USERS', () => {
       requiredProps.forEach(
         async (prop, i) => {
           const mockFail = failedMock(goodMocks[0], prop)
-          const response = await request(app).post('/users').send(mockFail).expect(400)
+          const response = await request(app).post(USERS_ROUTES.main).send(mockFail).expect(400)
           
           expect(response.badRequest).toBeTruthy()
           expect(response.body.errors[prop].kind).toBe('required')
@@ -145,7 +147,7 @@ describe('USERS', () => {
 
     test('Sign up a new user with an invalid email (user validation)', async () => {
       const mockFailedEmail = { ...goodMocks[0], email: 'test'}
-      const response = await request(app).post('/users').send(mockFailedEmail).expect(400)
+      const response = await request(app).post(USERS_ROUTES.main).send(mockFailedEmail).expect(400)
       
       expect(response.badRequest).toBeTruthy()
       expect(response.body.errors.email.kind).toBe('user defined')
@@ -154,7 +156,7 @@ describe('USERS', () => {
 
     test('Sign up a new user with an invalid password (minlength validation)', async () => {
       const mockFailedPass = { ...goodMocks[0], password: 'test'}
-      const response = await request(app).post('/users').send(mockFailedPass).expect(400)
+      const response = await request(app).post(USERS_ROUTES.main).send(mockFailedPass).expect(400)
       
       expect(response.badRequest).toBeTruthy()
       expect(response.body.errors.password.kind).toBe('minlength')
@@ -162,8 +164,8 @@ describe('USERS', () => {
     })
     
     test('Sign up twice the same user', async () => {
-      await request(app).post('/users').send(goodMocks[0]).expect(201)
-      const response = await request(app).post('/users').send(goodMocks[0]).expect(400)
+      await request(app).post(USERS_ROUTES.main).send(goodMocks[0]).expect(201)
+      const response = await request(app).post(USERS_ROUTES.main).send(goodMocks[0]).expect(400)
 
       expect(response.badRequest).toBeTruthy()
       expect(response.body.driver).toBeTruthy()
@@ -173,10 +175,10 @@ describe('USERS', () => {
     test('Update a created user with invalid properties', async () => {
       const failedUpdate = { age: 15 }
 
-      const response = await request(app).post('/users').send(goodMocks[0]).expect(201)
+      const response = await request(app).post(USERS_ROUTES.main).send(goodMocks[0]).expect(201)
       const updated =
         await request(app)
-          .patch('/users/me')
+          .patch(USERS_ROUTES.me)
           .set('Authorization', `Bearer ${response.body.token}`)
           .send(failedUpdate)
           .expect(403)
@@ -184,18 +186,18 @@ describe('USERS', () => {
       expect(updated.body.error).toBe(MESSAGES.UPDATES)
     })
 
-    //trying to delete an already deleted user
+    // TODO: TRYING TO DELETE AN ALREADY DELETED USER
 
     test('Log out a deleted user', async () => {
-      const { body } = await request(app).post('/users').send(goodMocks[0]).expect(201)
+      const { body } = await request(app).post(USERS_ROUTES.main).send(goodMocks[0]).expect(201)
 
       await request(app)
-        .delete('/users/me')
+        .delete(USERS_ROUTES.me)
         .set('Authorization', `Bearer ${body.token}`)
         .expect(200)
 
       const response = await request(app)
-        .post('/users/logout')
+        .post(USERS_ROUTES.logout)
         .set('Authorization', `Bearer ${body.token}`)
         .expect(401)
         
@@ -203,15 +205,15 @@ describe('USERS', () => {
     })
 
     test('Log out a deleted user from all sessions', async () => {
-      const { body } = await request(app).post('/users').send(goodMocks[0]).expect(201)
+      const { body } = await request(app).post(USERS_ROUTES.main).send(goodMocks[0]).expect(201)
 
       await request(app)
-        .delete('/users/me')
+        .delete(USERS_ROUTES.me)
         .set('Authorization', `Bearer ${body.token}`)
         .expect(200)
 
       const response = await request(app)
-        .post('/users/logoutAll')
+        .post(USERS_ROUTES.logoutAll)
         .set('Authorization', `Bearer ${body.token}`)
         .expect(401)
         

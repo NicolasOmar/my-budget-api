@@ -34,7 +34,7 @@ Those environments are being built and deployed on [Heroku](https://www.heroku.c
 ## Find out more
 | [Documentation](https://nicolasomar.github.io/my-budget-docs) | [Project Status](https://trello.com/b/R6Yn7vb0/mybudget) | [Changelog](https://github.com/NicolasOmar/my-budget-angular/blob/master/CHANGELOG.md) |
 | ----- | ----- | ----- |
-| Documentation related to project (objective, features & roadmap) & technical aspects (used packages, testing mechanisms) | Project board to track current status | List of features and bug fixes included on each iteration/release |
+| Documentation related to project (objective, features & roadmap) & technical aspects (used packages, testing mechanisms) | Project board to track current status | List of features, improvements and bug fixes included on each iteration |
 
 ## License
 **MIT**
