@@ -1,9 +1,9 @@
 const USERS_ROUTES = {
-  main: '/users',
-  me: '/users/me',
-  login: '/users/login',
-  logout: '/users/logout',
-  logoutAll: '/users/logoutAll'
+  MAIN: '/users',
+  ME: '/users/me',
+  LOGIN: '/users/login',
+  LOGOUT: '/users/logout',
+  LOGOUT_ALL: '/users/logoutAll'
 }
 
 module.exports = {

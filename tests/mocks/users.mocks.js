@@ -1,82 +1,40 @@
 const User = require('../../src/models/user')
 
-const goodMocks = [
-  {
-    "name": "Virgie",
-    "lastName": "Greer",
-    "email": "virgie@gmail.com",
-    "password": "euautelaboris"
-  },
-  {
-    "name": "Everett",
-    "lastName": "Frank",
-    "email": "everett@gmail.com",
-    "password": "nullamagnaculpa"
-  },
-  {
-    "name": "Kelly",
-    "lastName": "Flores",
-    "email": "kelly@gmail.com",
-    "password": "ealaborisexcepteur"
-  },
-  {
-    "name": "Miranda",
-    "lastName": "Valentine",
-    "email": "miranda@gmail.com",
-    "password": "eualiquipconsectetur"
-  },
-  {
-    "name": "Maldonado",
-    "lastName": "Chapman",
-    "email": "maldonado@gmail.com",
-    "password": "laboreullamcosit"
-  },
-  {
-    "name": "Hallie",
-    "lastName": "Mccarthy",
-    "email": "hallie@gmail.com",
-    "password": "laborisquiea"
-  },
-  {
-    "name": "Cole",
-    "lastName": "Rowland",
-    "email": "cole@gmail.com",
-    "password": "occaecatsitdolore"
-  },
-  {
-    "name": "Debra",
-    "lastName": "Holder",
-    "email": "debra@gmail.com",
-    "password": "consequatanimsint"
-  },
-  {
-    "name": "Justice",
-    "lastName": "Knapp",
-    "email": "justice@gmail.com",
-    "password": "quitemporaute"
-  }
-]
+const goodMock = {
+  name: 'Virgie',
+  lastName: 'Greer',
+  email: 'virgie@gmail.com',
+  password: 'testingNames'
+}
 
-const badMocks = [
-  {
-    "name": "Virgie",
-    "lastName": "Greer",
-    "email": "virgie@gmail.com",
-    "password": "eueueueueueueueueu"
+const badMocks = {
+  shortName: {
+    ...goodMock,
+    name: 'V'
   },
-  {
-    "name": "Virgie",
-    "lastName": "Greer",
-    "email": "virgie@gmail.com",
-    "password": "eu"
+  shortLastName: {
+    ...goodMock,
+    lastName: 'G'
   },
-  {
-    "name": "Virgie",
-    "lastName": "Greer",
-    "email": "virgie",
-    "password": "euautelaboris2"
+  shortPass: {
+    ...goodMock,
+    password: 't'
+  },
+  badMail: {
+    ...goodMock,
+    email: 'virgie.gmail.net',
+  },
+  badPass: {
+    ...goodMock,
+    password: 'testingErrors'
   }
-]
+}
+
+const updateMock = {
+  name: 'Updated Name',
+  lastName: 'Updated LastName',
+  email: 'test@testt.com'
+}
 
 const requiredProps = ['name', 'lastName', 'email', 'password']
 const requiredNames = ['Name', 'Last Name', 'Email', 'Password']
@@ -92,8 +50,9 @@ const setUpDatabase = async () => {
 }
 
 module.exports = {
-  goodMocks,
+  goodMock,
   badMocks,
+  updateMock,
   requiredProps,
   requiredNames,
   failedMock,
