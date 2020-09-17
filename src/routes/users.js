@@ -4,8 +4,8 @@ const router = new express.Router()
 const authenticator = require('../middleware/auth')
 // MODEL
 const User = require('../models/user')
-// ERROR CODES AND MESSAGES
-const { MESSAGES } = require('../../config/errors')
+// ERROR CODES AND ERROR_MSG
+const { ERROR_MSG } = require('../../config/errors')
 // ROUTES
 const { USERS_ROUTES } = require('../../config/routes')
 
@@ -41,7 +41,7 @@ router.patch(USERS_ROUTES.me, authenticator, async (request, response) => {
   )
 
   if (!isValidOperation) {
-    response.status(403).send({ error: MESSAGES.UPDATES })
+    response.status(403).send({ error: ERROR_MSG.UPDATES })
   }
 
   try {

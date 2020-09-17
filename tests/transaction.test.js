@@ -8,7 +8,7 @@ const {
   failedMock
 } = require('./mocks/transaction.mocks')
 // ERRORS
-const { MESSAGES } = require('../config/errors')
+const { ERROR_MSG } = require('../config/errors')
 
 let userToken = null
 
@@ -44,7 +44,7 @@ describe('TRANSACTIONS', () => {
       
       expect(response.badRequest).toBeTruthy()
       expect(response.body.errors.title.kind).toBe('required')
-      expect(response.body.errors.title.message).toBe(MESSAGES.MISSING('Title'))
+      expect(response.body.errors.title.message).toBe(ERROR_MSG.MISSING('Title'))
     })
   })
 })

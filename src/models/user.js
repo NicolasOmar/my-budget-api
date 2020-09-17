@@ -3,38 +3,40 @@ const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 // ERRORS
-const { MESSAGES } = require('../../config/errors')
+const { ERROR_MSG } = require('../../config/errors')
 
 const userSchema = new mongoose.Schema(
   {
     // TODO: INCLUDE MINLENGTH AND MAXLENGTH
     name: {
       type: String,
-      required: [true, MESSAGES.MISSING('Name')],
+      required: [true, ERROR_MSG.MISSING('Name')],
+      minlength: [3, ERROR_MSG.MIN('Name', 3)],
       trim: true
     },
     lastName: {
       type: String,
-      required: [true, MESSAGES.MISSING('Last Name')],
+      required: [true, ERROR_MSG.MISSING('Last Name')],
+      minlength: [3, ERROR_MSG.MIN('Last Name', 3)],
       trim: true
     },
     email: {
       type: String,
       unique: true, // CANNOT BE OTHER EQUAL THAT THIS VALUE
-      required: [true, MESSAGES.MISSING('Email')], // CANNOT AVOID INCLUDING THIS FIELD WHEN INSERT A NEW DOCUMENT
+      required: [true, ERROR_MSG.MISSING('Email')], // CANNOT AVOID INCLUDING THIS FIELD WHEN INSERT A NEW DOCUMENT
       trim: true, // REMOVE EMPTY SPACES BEFORE AND AFTER STRING
       lowercase: true, // CHANGE ENTIRE STRING INTO LOWERCASE
       validate: value => {
         if (!validator.isEmail(value)) {
-          throw { message: MESSAGES.EMAIL }
+          throw { message: ERROR_MSG.EMAIL }
         }
       }
     },
     password: {
       type: String,
-      required: [true, MESSAGES.MISSING('Password')],
-      trim: true,
-      minlength: [6, MESSAGES.PASSWORD(6)]
+      required: [true, ERROR_MSG.MISSING('Password')],
+      minlength: [6, ERROR_MSG.MIN('Password', 6)],
+      trim: true
     },
     tokens: [
       {
@@ -64,13 +66,13 @@ userSchema.statics.findByCredentials = async (email, password) => {
   const finded = await User.findOne({ email })
 
   if (!finded) {
-    throw { message: MESSAGES.LOGIN }
+    throw { message: ERROR_MSG.LOGIN }
   }
 
   const user = await bcrypt.compare(password, finded.password)
 
   if (!user) {
-    throw { message: MESSAGES.LOGIN }
+    throw { message: ERROR_MSG.LOGIN }
   }
 
   return finded

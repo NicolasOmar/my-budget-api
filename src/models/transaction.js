@@ -1,12 +1,12 @@
 const mongoose = require('mongoose')
 // ERRORS
-const { MESSAGES } = require('../../config/errors')
+const { ERROR_MSG } = require('../../config/errors')
 
 const transactionSchema = new mongoose.Schema(
   {
     title: {
       type: String,
-      required: [true, MESSAGES.MISSING('Title')],
+      required: [true, ERROR_MSG.MISSING('Title')],
       trim: true
     },
     description: {
@@ -15,11 +15,11 @@ const transactionSchema = new mongoose.Schema(
     },
     amount: {
       type: Number,
-      required: [true, MESSAGES.MISSING('Amount')]
+      required: [true, ERROR_MSG.MISSING('Amount')]
     },
     date: {
       type: Date,
-      required: [true, MESSAGES.MISSING('Date')],
+      required: [true, ERROR_MSG.MISSING('Date')],
       min: new Date('1/1/2000')
     },
     user: {

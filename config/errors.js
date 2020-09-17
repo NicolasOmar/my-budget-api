@@ -1,10 +1,10 @@
-const ERROR_CODES = {
+const ERROR_CODE = {
   ALREADY_EXISTS: 11000
 }
 
-const MESSAGES = {
+const ERROR_MSG = {
   EMAIL: 'The user needs a valid mail format (@site.com) to be created',
-  PASSWORD: (min = 6) => `Password needs to have more that ${min} characters`,
+  MIN: (control, min) => `The ${control} needs to have more that ${min} characters`,
   AMOUNT: 'The amount of the transaction should be composed by numbers only',
   DATE: 'The date of the transaction should be in a valid format (DD/MM/YYYY)',
   UPDATES: 'Invalid update data',
@@ -14,6 +14,6 @@ const MESSAGES = {
 }
 
 module.exports = {
-  ERROR_CODES,
-  MESSAGES
+  ERROR_CODE,
+  ERROR_MSG
 }

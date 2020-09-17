@@ -10,7 +10,7 @@ const {
   setUpDatabase
 } = require('./mocks/users.mocks')
 // ERROR CODES AND MESSAGES
-const { ERROR_CODES, MESSAGES } = require('../config/errors')
+const { ERROR_CODE, ERROR_MSG } = require('../config/errors')
 // ROUTES
 const { USERS_ROUTES } = require('../config/routes')
 
@@ -103,17 +103,17 @@ describe('USERS', () => {
   describe('SAD PATH', () => {
     test('Login a not created user', async () => {
       const response = await request(app).post(USERS_ROUTES.login).send(badMocks[0]).expect(400)
-      expect(response.body.message).toBe(MESSAGES.LOGIN)
+      expect(response.body.message).toBe(ERROR_MSG.LOGIN)
     })
 
     test('Login a user with bad properties', async () => {
       const response = await request(app).post(USERS_ROUTES.login).send(badMocks[1]).expect(400)
       expect(response.badRequest).toBeTruthy()
-      expect(response.body.message).toBe(MESSAGES.LOGIN)
+      expect(response.body.message).toBe(ERROR_MSG.LOGIN)
 
       const mailResponse = await request(app).post(USERS_ROUTES.login).send(badMocks[2]).expect(400)
       expect(mailResponse.badRequest).toBeTruthy()
-      expect(mailResponse.body.message).toBe(MESSAGES.LOGIN)
+      expect(mailResponse.body.message).toBe(ERROR_MSG.LOGIN)
     })
 
     test('Login a deleted user', async () => {
@@ -129,7 +129,7 @@ describe('USERS', () => {
         .set('Authorization', `Bearer ${body.token}`)
         .expect(400)
 
-      expect(response.body.message).toBe(MESSAGES.LOGIN)
+      expect(response.body.message).toBe(ERROR_MSG.LOGIN)
     })
 
     test('Sign up a new user with certain required fields empty', async () => {
@@ -140,7 +140,7 @@ describe('USERS', () => {
           
           expect(response.badRequest).toBeTruthy()
           expect(response.body.errors[prop].kind).toBe('required')
-          expect(response.body.errors[prop].message).toBe(MESSAGES.MISSING(requiredNames[i]))
+          expect(response.body.errors[prop].message).toBe(ERROR_MSG.MISSING(requiredNames[i]))
         }
       )
     })
@@ -151,7 +151,7 @@ describe('USERS', () => {
       
       expect(response.badRequest).toBeTruthy()
       expect(response.body.errors.email.kind).toBe('user defined')
-      expect(response.body.errors.email.message).toBe(MESSAGES.EMAIL)
+      expect(response.body.errors.email.message).toBe(ERROR_MSG.EMAIL)
     })
 
     test('Sign up a new user with an invalid password (minlength validation)', async () => {
@@ -160,7 +160,7 @@ describe('USERS', () => {
       
       expect(response.badRequest).toBeTruthy()
       expect(response.body.errors.password.kind).toBe('minlength')
-      expect(response.body.errors.password.message).toBe(MESSAGES.PASSWORD(6))
+      expect(response.body.errors.password.message).toBe(ERROR_MSG.MIN('Password', 6))
     })
     
     test('Sign up twice the same user', async () => {
@@ -169,7 +169,7 @@ describe('USERS', () => {
 
       expect(response.badRequest).toBeTruthy()
       expect(response.body.driver).toBeTruthy()
-      expect(response.body.code).toBe(ERROR_CODES.ALREADY_EXISTS)
+      expect(response.body.code).toBe(ERROR_CODE.ALREADY_EXISTS)
     })
 
     test('Update a created user with invalid properties', async () => {
@@ -183,7 +183,7 @@ describe('USERS', () => {
           .send(failedUpdate)
           .expect(403)
       
-      expect(updated.body.error).toBe(MESSAGES.UPDATES)
+      expect(updated.body.error).toBe(ERROR_MSG.UPDATES)
     })
 
     // TODO: TRYING TO DELETE AN ALREADY DELETED USER
@@ -201,7 +201,7 @@ describe('USERS', () => {
         .set('Authorization', `Bearer ${body.token}`)
         .expect(401)
         
-      expect(response.body.message).toBe(MESSAGES.AUTHENTICATE)
+      expect(response.body.message).toBe(ERROR_MSG.AUTHENTICATE)
     })
 
     test('Log out a deleted user from all sessions', async () => {
@@ -217,7 +217,7 @@ describe('USERS', () => {
         .set('Authorization', `Bearer ${body.token}`)
         .expect(401)
         
-      expect(response.body.message).toBe(MESSAGES.AUTHENTICATE)
+      expect(response.body.message).toBe(ERROR_MSG.AUTHENTICATE)
     })
   })
 })
