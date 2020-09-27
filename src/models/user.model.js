@@ -89,15 +89,15 @@ userSchema.methods.generateAuthToken = async function () {
 }
 
 // ACCESIBLE TO MODEL. USED TO HASH THE PASSWORD BEFORE SAVING
-userSchema.pre('save', async function (next) {
-  const user = this
+// userSchema.pre('save', async function (next) {
+//   const user = this
 
-  if (user.isModified('password')) {
-    user.password = await bcrypt.hash(user.password, 8)
-  }
+//   if (user.isModified('password')) {
+//     user.password = await bcrypt.hash(user.password, 8)
+//   }
 
-  next()
-})
+//   next()
+// })
 
 userSchema.methods.toJSON = function () {
   const user = this

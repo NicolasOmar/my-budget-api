@@ -10,7 +10,8 @@ const ERROR_MSG = {
   UPDATES: 'Invalid update data',
   LOGIN: 'Your email and/or password is incorrect. Try again with other credentials',
   AUTHENTICATE: 'Please authenticate to keep using the app',
-  MISSING: value => `The user needs a valid ${value} to be created`
+  MISSING: value => `The user needs a valid ${value} to be created`,
+  ALREADY_EXISTS: 'There is an already registered user'
 }
 
 module.exports = {

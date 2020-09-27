@@ -3,7 +3,7 @@ const router = new express.Router()
 // MIDDLEWARE
 const authenticator = require('../middleware/auth')
 // MODEL
-const User = require('../models/user')
+const User = require('../models/user.model')
 // ERROR CODES AND ERROR_MSG
 const { ERROR_MSG } = require('../../config/errors')
 // ROUTES
@@ -18,9 +18,21 @@ router.post(USERS_ROUTES.MAIN, async (request, response) => {
     const token = await newUser.generateAuthToken()
     response.status(201).send({ newUser, token })
   } catch (error) {
-    response.status(400).send(error)
+    response.status(400).send(handleErrorMessages(error))
   }
 })
+
+const handleErrorMessages = error => {
+  const errorMsgs = error.errors
+    ? Object.keys(error.errors)
+        .map(key => error.errors[key].message)
+        .join(', ')
+    : ERROR_MSG.ALREADY_EXISTS
+  return {
+    ...error,
+    message: errorMsgs
+  }
+}
 
 // FIND YOUR USER DATA
 router.get(USERS_ROUTES.ME, authenticator, async (request, response) => {

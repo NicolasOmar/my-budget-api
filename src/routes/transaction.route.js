@@ -3,7 +3,7 @@ const router = new express.Router()
 // IMPORT MIDDLEWARE
 const authenticator = require('../middleware/auth')
 // IMPORT MODEL
-const Transcation = require('../models/transaction')
+const Transcation = require('../models/transaction.model')
 
 router.get('/transactions', authenticator, async (request, response) => {
   try {

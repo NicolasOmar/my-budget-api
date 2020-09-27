@@ -1,4 +1,4 @@
-const User = require('../../src/models/user')
+const User = require('../../src/models/user.model')
 
 const goodMock = {
   name: 'Virgie',

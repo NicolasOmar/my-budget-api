@@ -7,8 +7,8 @@ const mongoose = require('./db/mongoose')
 // IMPORT AND SET EXPRESS SERVER
 const app = express()
 // IMPORT ROUTERS
-const usersRouter = require('./routes/users')
-const transactionRouter = require('./routes/transaction')
+const usersRouter = require('./routes/users.route')
+const transactionRouter = require('./routes/transaction.route')
 // CONNECT TO MONGO DATABASE
 app.connect(mongoose)
 // MANAGE EXPRESS SERVER USING JSON

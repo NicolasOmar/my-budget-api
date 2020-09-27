@@ -7,7 +7,7 @@ const runVersionUpdate = async () => {
     const { value } = await prompts({
       type: 'select',
       name: 'value',
-      message: 'You are going to update the app´s package version. Which option is this time?',
+      message: 'You are going to update this app package version. Which option you will pick?',
       choices: [
         { title: '1. Patch: Indicates small changes. Used for updates (eg. 0.0.1 -> 0.0.2)', value: 'patch' },
         { title: '2. Minor: Indicates medium changes. Used for features (eg. 0.0.2 -> 0.1.0)', value: 'minor' },

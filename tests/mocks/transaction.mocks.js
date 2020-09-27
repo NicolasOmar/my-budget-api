@@ -1,4 +1,4 @@
-const Transaction = require('../../src/models/transaction')
+const Transaction = require('../../src/models/transaction.model')
 
 const mocks = [
   {
