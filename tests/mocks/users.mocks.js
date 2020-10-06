@@ -1,10 +1,13 @@
+const cryptoJs = require('crypto-js')
 const User = require('../../src/models/user.model')
+
+const encryptPass = (pass) => cryptoJs[process.env.CRYPT_METH].encrypt(pass, process.env.CRYPT_SECRET).toString()
 
 const goodMock = {
   name: 'Virgie',
   lastName: 'Greer',
   email: 'virgie@gmail.com',
-  password: 'testingNames'
+  password: encryptPass('testingNames')
 }
 
 const badMocks = {
@@ -18,7 +21,7 @@ const badMocks = {
   },
   shortPass: {
     ...goodMock,
-    password: 't'
+    password: encryptPass('t')
   },
   badMail: {
     ...goodMock,
@@ -26,7 +29,7 @@ const badMocks = {
   },
   badPass: {
     ...goodMock,
-    password: 'testingErrors'
+    password: encryptPass('testingErrors')
   }
 }
 

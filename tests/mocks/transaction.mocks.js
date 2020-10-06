@@ -1,4 +1,7 @@
+const cryptoJs = require('crypto-js')
 const Transaction = require('../../src/models/transaction.model')
+
+const encryptPass = (pass) => cryptoJs[process.env.CRYPT_METH].encrypt(pass, process.env.CRYPT_SECRET).toString()
 
 const mocks = [
   {
@@ -53,7 +56,7 @@ const testUser = {
   name: 'test',
   lastName: 'test',
   email: 'test@test.com',
-  password: 'myTestPassword'
+  password: encryptPass('myTestPassword')
 }
 
 const requiredProps = ['title', 'amount', 'date']

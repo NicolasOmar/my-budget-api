@@ -1,38 +1,30 @@
 const express = require('express')
+const cryptoJs = require('crypto-js')
 const router = new express.Router()
 // MIDDLEWARE
 const authenticator = require('../middleware/auth')
 // MODEL
 const User = require('../models/user.model')
 // ERROR CODES AND ERROR_MSG
-const { ERROR_MSG } = require('../../config/errors')
+const { ERROR_MSG, handleErrorMessages } = require('../../config/errors')
 // ROUTES
 const { USERS_ROUTES } = require('../../config/routes')
 
 // INSERT A NEW USER
 router.post(USERS_ROUTES.MAIN, async (request, response) => {
-  const newUser = new User(request.body)
+  const newUser = new User({
+    ...request.body,
+    password: decryptPass(request.body.password)
+  })
 
   try {
     await newUser.save()
     const token = await newUser.generateAuthToken()
     response.status(201).send({ newUser, token })
   } catch (error) {
-    response.status(400).send(handleErrorMessages(error))
+    response.status(400).send(handleErrorMessages(error, 'User'))
   }
 })
-
-const handleErrorMessages = error => {
-  const errorMsgs = error.errors
-    ? Object.keys(error.errors)
-        .map(key => error.errors[key].message)
-        .join(', ')
-    : ERROR_MSG.ALREADY_EXISTS
-  return {
-    ...error,
-    message: errorMsgs
-  }
-}
 
 // FIND YOUR USER DATA
 router.get(USERS_ROUTES.ME, authenticator, async (request, response) => {
@@ -81,7 +73,7 @@ router.delete(USERS_ROUTES.ME, authenticator, async (request, response) => {
 router.post(USERS_ROUTES.LOGIN, async (request, response) => {
   try {
     const { email, password } = request.body
-    const userLogged = await User.findByCredentials(email, password)
+    const userLogged = await User.findByCredentials(email, decryptPass(password))
     const token = await userLogged.generateAuthToken()
     response.send({ userLogged, token })
   } catch (error) {
@@ -118,5 +110,13 @@ router.post(USERS_ROUTES.LOGOUT_ALL, authenticator, async (request, response) =>
     response.status(500).send()
   }
 })
+
+const decryptPass = pass => {
+  return pass
+    ? cryptoJs[process.env.CRYPT_METH]
+        .decrypt(pass, process.env.CRYPT_SECRET)
+        .toString(cryptoJs.enc.Utf8)
+    : null
+}
 
 module.exports = router

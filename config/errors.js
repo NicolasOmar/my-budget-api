@@ -11,10 +11,23 @@ const ERROR_MSG = {
   LOGIN: 'Your email and/or password is incorrect. Try again with other credentials',
   AUTHENTICATE: 'Please authenticate to keep using the app',
   MISSING: value => `The user needs a valid ${value} to be created`,
-  ALREADY_EXISTS: 'There is an already registered user'
+  ALREADY_EXISTS: entity => `There is an already registered use ${entity}`
+}
+
+const handleErrorMessages = (error, entity) => {
+  const errorMsgs = error.errors
+    ? Object.keys(error.errors)
+        .map(key => error.errors[key].message)
+        .join(', ')
+    : ERROR_MSG.ALREADY_EXISTS(entity)
+  return {
+    ...error,
+    message: errorMsgs
+  }
 }
 
 module.exports = {
   ERROR_CODE,
-  ERROR_MSG
+  ERROR_MSG,
+  handleErrorMessages
 }

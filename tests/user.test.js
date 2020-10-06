@@ -1,5 +1,4 @@
 const request = require('supertest')
-const bcrypt = require('bcryptjs')
 const app = require('../src/app')
 const mongoose = require('../src/db/mongoose')
 const {
@@ -22,12 +21,8 @@ afterAll(() => mongoose.disconnect())
 
 describe('USERS', () => {
   describe('HAPPY PATH', () => {
-    test('Login a created user', async () => {
-      const hashedMock = {
-        ...goodMock,
-        password: bcrypt.hashSync(goodMock.password, 8)
-      }
-      await request(app).post(USERS_ROUTES.MAIN).send(hashedMock).expect(201)
+    test('Login a created user', async () => {      
+      await request(app).post(USERS_ROUTES.MAIN).send(goodMock).expect(201)
       const { body } =
         await request(app)
           .post(USERS_ROUTES.LOGIN)
@@ -130,7 +125,7 @@ describe('USERS', () => {
         .post(USERS_ROUTES.LOGIN)
         .set('Authorization', `Bearer ${body.token}`)
         .expect(400)
-
+      
       expect(response.body.message).toBe(ERROR_MSG.LOGIN)
     })
 
