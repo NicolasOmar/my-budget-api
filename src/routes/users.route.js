@@ -45,7 +45,7 @@ router.patch(USERS_ROUTES.ME, authenticator, async (request, response) => {
   )
 
   if (!isValidOperation) {
-    response.status(403).send({ error: ERROR_MSG.UPDATES })
+    return response.status(403).send({ error: ERROR_MSG.UPDATES })
   }
 
   try {
@@ -55,7 +55,7 @@ router.patch(USERS_ROUTES.ME, authenticator, async (request, response) => {
     !request.user && response.status(404).send()
     response.send(request.user)
   } catch (error) {
-    response.status(400).send()
+    response.status(400).send(handleErrorMessages(error, 'User'))
   }
 })
 
@@ -107,7 +107,7 @@ router.post(USERS_ROUTES.LOGOUT_ALL, authenticator, async (request, response) =>
     await request.user.save()
     response.send(true)
   } catch (error) {
-    response.status(500).send()
+    response.status(500).send(error)
   }
 })
 

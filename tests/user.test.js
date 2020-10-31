@@ -197,8 +197,6 @@ describe('USERS', () => {
       expect(updated.body.error).toBe(ERROR_MSG.UPDATES)
     })
 
-    // TODO: TRYING TO DELETE AN ALREADY DELETED USER
-
     test('Log out a deleted user', async () => {
       const { body } = await request(app).post(USERS_ROUTES.MAIN).send(goodMock).expect(201)
 
