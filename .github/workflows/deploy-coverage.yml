@@ -1,0 +1,32 @@
+name: Deploy coverage
+
+on:
+  push:
+    branches:
+      - in-progress
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+
+    - name: Set up environment
+      uses: actions/setup-node@v1
+      with:
+        node-version: 12
+
+    - name: Install dependences
+      run: npm run setup:ci
+
+    - name: Run tests
+      run: npm run test
+
+    - name: Run Codecov coverage colector
+      uses: codecov/codecov-action@v1.0.15
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./coverage/coverage-final.json
+        flags: unittests
