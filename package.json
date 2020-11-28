@@ -1,12 +1,13 @@
 {
   "name": "my-budget-api",
-  "version": "0.0.15",
+  "version": "0.0.17",
   "description": "RESTful api based on NodeJs to give middle/back-end support for upcomming Angular and React web applications",
   "main": "node ./src/index.js",
   "scripts": {
     "start": "node ./src/index.js",
     "local": "env-cmd -f ./env/local.env nodemon ./src/index.js",
     "test": "env-cmd -f ./env/test.env jest --runInBand --collectCoverage",
+    "setup:ci": "npm i && npm i -g codecov",
     "lint": "eslint --fix src",
     "prettier": "prettier --write src",
     "update-version": "node update-version.js"
