@@ -108,3 +108,4 @@ package-lock.json
 .DS_Store
 *.env
 !test.env
+!local.env

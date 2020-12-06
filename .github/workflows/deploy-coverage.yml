@@ -1,0 +1,18 @@
+name: Deploy coverage
+
+on: [push]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+
+    - name: Run Codecov coverage colector
+      uses: codecov/codecov-action@v1.0.15
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./coverage/coverage-final.json
+        flags: unittests
