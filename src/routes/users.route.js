@@ -52,7 +52,10 @@ router.patch(USERS_ROUTES.ME, authenticator, async (request, response) => {
     updates.forEach(update => (request.user[update] = request.body[update]))
     await request.user.save()
 
-    !request.user && response.status(404).send()
+    if (!request.user) {
+      return response.status(404).send()
+    }
+
     response.send(request.user)
   } catch (error) {
     response.status(400).send(handleErrorMessages(error, 'User'))

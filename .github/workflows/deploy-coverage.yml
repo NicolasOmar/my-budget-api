@@ -1,9 +1,6 @@
 name: Deploy coverage
 
-on:
-  push:
-    branches:
-      - in-progress
+on: [push]
 
 jobs:
   run:
