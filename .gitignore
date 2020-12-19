@@ -104,7 +104,6 @@ dist
 .tern-port
 
 # Specific files/folders
-package-lock.json
 .DS_Store
 *.env
 !test.env
