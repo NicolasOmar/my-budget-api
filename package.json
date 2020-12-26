@@ -14,6 +14,14 @@
   },
   "author": "Nicolás Omar González Passerino",
   "license": "MIT",
+  "homepage": "https://github.com/NicolasOmar/my-budget-api#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NicolasOmar/my-budget-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NicolasOmar/my-budget-api/issues"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
