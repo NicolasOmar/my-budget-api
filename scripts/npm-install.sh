@@ -1,3 +1,3 @@
-cd /var/nodeapp
+#!/bin/bash
 npm install
 npm install -g forever
