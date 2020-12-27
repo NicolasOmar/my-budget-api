@@ -1,1 +1,1 @@
-forever start /var/nodeapp/src/index.js
+node /var/nodeapp/src/index.js
