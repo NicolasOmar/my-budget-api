@@ -1,1 +1,0 @@
-node /var/nodeapp/src/index.js
