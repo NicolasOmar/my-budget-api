@@ -2,18 +2,9 @@
   "name": "my-budget-api",
   "version": "0.0.18",
   "description": "RESTful api based on NodeJs to give middle/back-end support for upcomming Angular and React web applications",
-  "main": "nodemon ./src/index.js",
-  "scripts": {
-    "start": "nodemon ./src/index.js",
-    "local": "env-cmd -f ./env/local.env nodemon ./src/index.js",
-    "test": "env-cmd -f ./env/test.env jest --runInBand --collectCoverage",
-    "setup:ci": "npm i && npm i -g codecov",
-    "lint": "eslint --fix src",
-    "prettier": "prettier --write src",
-    "update-version": "node update-version.js"
-  },
   "author": "Nicolás Omar González Passerino",
   "license": "MIT",
+  "private": false,
   "homepage": "https://github.com/NicolasOmar/my-budget-api#readme",
   "repository": {
     "type": "git",
@@ -21,6 +12,15 @@
   },
   "bugs": {
     "url": "https://github.com/NicolasOmar/my-budget-api/issues"
+  },
+  "scripts": {
+    "start": "env-cmd -f ./env/local.env nodemon ./src/index.js",
+    "start:prod": "nodemon ./src/index.js",
+    "test": "env-cmd -f ./env/test.env jest --runInBand --collectCoverage",
+    "setup:ci": "npm i && npm i -g codecov",
+    "lint": "eslint --fix src",
+    "prettier": "prettier --write src",
+    "update-version": "node update-version.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

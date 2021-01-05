@@ -1,5 +1,5 @@
 # My Budget API
-RESTful API based on NodeJs to give middle/back-end support for web clients based on [Angular](https://mybudget-angular.herokuapp.com/) and [React](https://mybudget-react.herokuapp.com/).
+RESTful API based on NodeJs to give middle/back-end support for a web client based on [Angular](https://master.d2i6kyeewx6g66.amplifyapp.com/).
 
 ## What do I need?
 Before cloning this repo, I recommend installing the following software:
@@ -17,24 +17,23 @@ npm install
 ```
 
 ## How to run it
-Before asking, I do not recommend `npm start` because it's reserved for the Heroku deploy process.
-Therefore, I added another option based on [nodemon](https://www.npmjs.com/package/nodemon) to run it as a non-stopping server
+To run it correctly (as a non-stopping server using local environment variables), I modified the `start` command by adding [nodemon](https://www.npmjs.com/package/nodemon) and [env-cmd](https://www.npmjs.com/package/env-cmd). So just run the following line:
 ```sh
-npm run local
+npm start
 ```
 
 ## Branches and Environments
-To maintain a better code tracking in time, I decided to separate two branches with its respective environments.
-Those environments are being built and deployed on [Heroku](https://www.heroku.com/) using [MongoDB](https://account.mongodb.com/) as database service.
+To maintain better code tracking in time, I decided to separate the development process into two branches with their respective environments.
+Those environments are being hosted on [DigitalOcean](https://www.digitalocean.com/) and connected to a [MongoDB instance](https://account.mongodb.com/) as database service.
 | Branch | Version | Coverage | Environment | Usage |
 | :--- | :---: | :---: | :--- | :--- |
-| master | ![MyBudget API (master version)](https://img.shields.io/github/package-json/v/nicolasomar/my-budget-api/master?color=success&label=%20&style=flat-square) | ![MyBudget API Coverage (master version)](https://img.shields.io/codecov/c/github/nicolasomar/my-budget-api/master?label=%20&style=flat-square&logo=codecov) | [mybudget-api](https://mybudget-api.herokuapp.com/) | Stable version
-| in-progress | ![MyBudget API (in-progress version)](https://img.shields.io/github/package-json/v/nicolasomar/my-budget-api/in-progress?color=yellow&label=%20&style=flat-square) | ![MyBudget API Coverage (in-progress version)](https://img.shields.io/codecov/c/github/nicolasomar/my-budget-api/in-progress?label=%20&style=flat-square&logo=codecov) | [mybudget-api-dev](https://mybudget-api-dev.herokuapp.com/) | Working on next iteration |
+| master | ![My Budget API (master branch)](https://img.shields.io/github/package-json/v/nicolasomar/my-budget-api/master?color=success&label=%20&style=flat-square) | ![My Budget API Coverage (master branch)](https://img.shields.io/codecov/c/github/nicolasomar/my-budget-api/master?label=%20&style=flat-square&logo=codecov) | [Production](https://my-budget-api-prod-ebnaf.ondigitalocean.app/) | Stable version
+| develop | ![My Budget API (develop branch)](https://img.shields.io/github/package-json/v/nicolasomar/my-budget-api/develop?color=yellow&label=%20&style=flat-square) | ![My Budget API Coverage (develop branch)](https://img.shields.io/codecov/c/github/nicolasomar/my-budget-api/develop?label=%20&style=flat-square&logo=codecov) | [Development](https://my-budget-api-dev-lq4w6.ondigitalocean.app/) | Working on next iteration |
 
 ## Find out more
-| [Documentation](https://nicolasomar.github.io/my-budget-docs) | [Project Status](https://trello.com/b/R6Yn7vb0/mybudget) | [Angular Repo](https://github.com/NicolasOmar/my-budget-angular) | [React Repo](https://github.com/NicolasOmar/my-budget-react) |
-| :--- | :--- | :--- | :--- |
-| Documentation page for analysis and technical reference | Trello board for project status & tracking | Angular front-end repository | React front-end repository
+| [Documentation](https://nicolasomar.github.io/my-budget-docs) | [Project Status](https://trello.com/b/R6Yn7vb0/mybudget) | [Angular Repo](https://github.com/NicolasOmar/my-budget) |
+| :--- | :--- | :--- |
+| Documentation page for analysis and technical reference | Trello board for project status & tracking | Angular front-end repository |
 
 ## License
 **MIT**
