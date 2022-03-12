@@ -28,7 +28,7 @@ Those environments are being hosted on [DigitalOcean](https://www.digitalocean.c
 | Branch | Version | Coverage | Environment | Usage |
 | :--- | :---: | :---: | :--- | :--- |
 | master | ![My Budget API (master branch)](https://img.shields.io/github/package-json/v/nicolasomar/my-budget-api/master?color=success&label=%20&style=flat-square) | ![My Budget API Coverage (master branch)](https://img.shields.io/codecov/c/github/nicolasomar/my-budget-api/master?label=%20&style=flat-square&logo=codecov) | [Production](https://my-budget-api-prod-ebnaf.ondigitalocean.app/) | Stable version
-| develop | ![My Budget API (develop branch)](https://img.shields.io/github/package-json/v/nicolasomar/my-budget-api/develop?color=yellow&label=%20&style=flat-square) | ![My Budget API Coverage (develop branch)](https://img.shields.io/codecov/c/github/nicolasomar/my-budget-api/develop?label=%20&style=flat-square&logo=codecov) | [Development](https://my-budget-api-dev-lq4w6.ondigitalocean.app/) | Working on next iteration |
+| develop | ![My Budget API (develop branch)](https://img.shields.io/github/package-json/v/nicolasomar/my-budget-api/develop?color=yellow&label=%20&style=flat-square) | ![My Budget API Coverage (develop branch)](https://img.shields.io/codecov/c/github/nicolasomar/my-budget-api/develop?label=%20&style=flat-square&logo=codecov) | - | Working on next iteration |
 
 ## Find out more
 | [Documentation](https://nicolasomar.github.io/my-budget-docs) | [Project Status](https://trello.com/b/R6Yn7vb0/mybudget) | [Angular Repo](https://github.com/NicolasOmar/my-budget) |
